@@ -3,7 +3,9 @@ using Mapster;
 using MapsterMapper;
 using Microsoft.EntityFrameworkCore;
 using RoadMD.Application.Dto.Vehicle;
+using RoadMD.Application.Services.InfractionCategories;
 using RoadMD.Application.Services.Vehicles;
+using RoadMD.Application.Validation.InfractionCategory;
 using RoadMD.Application.Validation.Vehicle;
 using RoadMD.Domain.Entities;
 using RoadMD.EntityFrameworkCore;
@@ -24,6 +26,8 @@ namespace RoadMD
                 {
                     cfg.AutomaticValidationEnabled = true;
                     cfg.RegisterValidatorsFromAssemblyContaining<CreateVehicleValidator>();
+                    cfg.RegisterValidatorsFromAssemblyContaining<CreateInfractionCategoryValidator>();
+                    cfg.RegisterValidatorsFromAssemblyContaining<UpdateInfractionCategoryValidator>();
                     cfg.DisableDataAnnotationsValidation = true;
                 });
 
@@ -34,10 +38,11 @@ namespace RoadMD
                 f.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, $"{nameof(RoadMD)}.xml"), true);
                 f.CustomSchemaIds((type) =>
                 {
-                    string returnedValue = type.Name;
+                    var returnedValue = type.Name;
 
                     if (returnedValue.EndsWith("dto", StringComparison.InvariantCultureIgnoreCase))
-                        returnedValue = returnedValue.Replace("dto", string.Empty, StringComparison.InvariantCultureIgnoreCase);
+                        returnedValue = returnedValue.Replace("dto", string.Empty,
+                            StringComparison.InvariantCultureIgnoreCase);
 
                     return returnedValue;
                 });
@@ -51,6 +56,7 @@ namespace RoadMD
             ConfigureMappings(services);
 
             services.AddScoped<IVehicleService, VehicleService>();
+            services.AddScoped<IInfractionCategoriesService, InfractionCategoriesService>();
             services.AddScoped<IEmailSender, EmailSenderMailKit>();
         }
 
@@ -58,10 +64,7 @@ namespace RoadMD
         {
             if (app.Environment.IsDevelopment())
             {
-                app.UseSwagger(op =>
-                {
-                    op.SerializeAsV2 = true;
-                });
+                app.UseSwagger(op => { op.SerializeAsV2 = true; });
 
                 app.UseSwaggerUI();
             }

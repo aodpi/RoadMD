@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace RoadMD.Controllers
 {
+    [Route("api/vehicles")]
     public class VehiclesController : ApiControllerBase
     {
         private readonly IVehicleService _vehicleService;

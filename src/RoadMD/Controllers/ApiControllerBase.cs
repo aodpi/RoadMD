@@ -3,7 +3,8 @@
 namespace RoadMD.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Produces("application/json")]
+    [Consumes("application/json")]
     public abstract class ApiControllerBase : ControllerBase
     {
     }

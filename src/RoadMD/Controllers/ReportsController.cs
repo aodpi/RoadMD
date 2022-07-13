@@ -4,8 +4,9 @@ using RoadMD.Modules.Abstractions;
 namespace RoadMD.Controllers
 {
     /// <summary>
-    /// Incindent reports
+    /// Incident reports
     /// </summary>
+    [Route("api/incident-reports")]
     public class ReportsController : ApiControllerBase
     {
         private readonly IEmailSender _emailSender;

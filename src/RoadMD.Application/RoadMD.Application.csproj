@@ -16,4 +16,11 @@
     <ProjectReference Include="..\RoadMD.EntityFrameworkCore\RoadMD.EntityFrameworkCore.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Dto\InfractionCategory\" />
+    <Folder Include="Dto\Common\" />
+    <Folder Include="Services\InfractionCategories\" />
+    <Folder Include="Validation\InfractionCategory\" />
+  </ItemGroup>
+
 </Project>

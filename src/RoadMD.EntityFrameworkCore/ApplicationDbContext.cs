@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ValueGeneration;
 using RoadMD.Domain.Entities;
 
 namespace RoadMD.EntityFrameworkCore
@@ -14,11 +13,8 @@ namespace RoadMD.EntityFrameworkCore
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
             base.OnModelCreating(modelBuilder);
-
-            modelBuilder.Entity<Vehicle>()
-                .Property(f => f.Id)
-                .ValueGeneratedOnAdd().HasValueGenerator<GuidValueGenerator>();
         }
     }
 }

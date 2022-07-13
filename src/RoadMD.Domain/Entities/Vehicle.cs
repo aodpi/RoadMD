@@ -1,11 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace RoadMD.Domain.Entities
+﻿namespace RoadMD.Domain.Entities
 {
-    public class Vehicle
+    public class Vehicle : BaseEntity
     {
-        [Key]
-        public Guid Id { get; set; }
         public string LetterCode { get; set; }
         public string NumberCode { get; set; }
     }

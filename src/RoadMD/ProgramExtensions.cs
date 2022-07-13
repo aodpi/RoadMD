@@ -1,18 +1,57 @@
-﻿namespace RoadMD
+﻿using FluentValidation.AspNetCore;
+using Mapster;
+using MapsterMapper;
+using Microsoft.EntityFrameworkCore;
+using RoadMD.Application.Dto.Vehicle;
+using RoadMD.Application.Services.Vehicles;
+using RoadMD.Application.Validation.Vehicle;
+using RoadMD.Domain.Entities;
+using RoadMD.EntityFrameworkCore;
+using RoadMD.Module.EmailSender;
+using RoadMD.Modules.Abstractions;
+
+namespace RoadMD
 {
     /// <summary>
     /// The "Startup.cs" we are missing
     /// </summary>
     public static class ProgramExtensions
     {
-        public static void ConfigureServices(this IServiceCollection services)
+        public static void ConfigureServices(this IServiceCollection services, IConfigurationRoot configuration)
         {
-            services.AddControllers();
+            services.AddControllers()
+                .AddFluentValidation(cfg =>
+                {
+                    cfg.AutomaticValidationEnabled = true;
+                    cfg.RegisterValidatorsFromAssemblyContaining<CreateVehicleValidator>();
+                    cfg.DisableDataAnnotationsValidation = true;
+                });
+
             services.AddEndpointsApiExplorer();
+
             services.AddSwaggerGen(f =>
             {
                 f.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, $"{nameof(RoadMD)}.xml"), true);
+                f.CustomSchemaIds((type) =>
+                {
+                    string returnedValue = type.Name;
+
+                    if (returnedValue.EndsWith("dto", StringComparison.InvariantCultureIgnoreCase))
+                        returnedValue = returnedValue.Replace("dto", string.Empty, StringComparison.InvariantCultureIgnoreCase);
+
+                    return returnedValue;
+                });
             });
+
+            services.AddDbContext<ApplicationDbContext>(op =>
+            {
+                op.UseSqlServer(configuration.GetConnectionString("Default"));
+            });
+
+            ConfigureMappings(services);
+
+            services.AddScoped<IVehicleService, VehicleService>();
+            services.AddScoped<IEmailSender, EmailSenderMailKit>();
         }
 
         public static void Configure(this WebApplication app)
@@ -30,6 +69,16 @@
             app.UseHttpsRedirection();
 
             app.MapControllers();
+        }
+
+        private static void ConfigureMappings(IServiceCollection services)
+        {
+            var config = new TypeAdapterConfig();
+
+            services.AddSingleton(config);
+            services.AddScoped<IMapper, ServiceMapper>();
+
+            config.NewConfig<Vehicle, VehicleDto>();
         }
     }
 }

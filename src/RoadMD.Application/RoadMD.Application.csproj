@@ -7,7 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\RoadMD.Domain\RoadMD.Domain.csproj" />
+    <PackageReference Include="FluentValidation" Version="11.1.0" />
+    <PackageReference Include="Mapster.DependencyInjection" Version="1.0.0" />
+    <PackageReference Include="Mapster.EFCore" Version="5.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\RoadMD.EntityFrameworkCore\RoadMD.EntityFrameworkCore.csproj" />
   </ItemGroup>
 
 </Project>

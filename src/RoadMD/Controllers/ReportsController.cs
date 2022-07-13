@@ -1,14 +1,20 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using RoadMD.Modules.Abstractions;
 
 namespace RoadMD.Controllers
 {
     /// <summary>
     /// Incindent reports
     /// </summary>
-    [ApiController]
-    [Route("reports")]
-    public class ReportsController : ControllerBase
+    public class ReportsController : ApiControllerBase
     {
+        private readonly IEmailSender _emailSender;
+
+        public ReportsController(IEmailSender emailSender)
+        {
+            _emailSender = emailSender;
+        }
+
         /// <summary>
         /// List reports based on type
         /// </summary>
@@ -24,6 +30,7 @@ namespace RoadMD.Controllers
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         public string Get(string typeOfGet)
         {
+            _emailSender.Send("admin@admin.com", "someone tried to access reports service");
             return "Hello World!!";
         }
     }

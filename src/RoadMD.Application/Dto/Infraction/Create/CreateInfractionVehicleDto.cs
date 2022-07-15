@@ -1,8 +1,7 @@
-﻿namespace RoadMD.Application.Dto.Vehicle
+﻿namespace RoadMD.Application.Dto.Infraction.Create
 {
-    public class VehicleDto
+    public class CreateInfractionVehicleDto
     {
-        public Guid Id { get; init; }
         public string LetterCode { get; init; }
         public string NumberCode { get; init; }
     }

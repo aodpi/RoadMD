@@ -23,9 +23,11 @@
     <Folder Include="Dto\ReportCategory\" />
     <Folder Include="Services\InfractionCategories\" />
     <Folder Include="Services\ReportCategories\" />
+    <Folder Include="Services\Infractions\" />
     <Folder Include="Validation\InfractionCategory\" />
     <Folder Include="Exceptions\" />
     <Folder Include="Validation\ReportCategory\" />
+    <Folder Include="Validation\Infraction\" />
   </ItemGroup>
 
 </Project>

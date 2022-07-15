@@ -16,15 +16,15 @@ namespace RoadMD.Application.Validation.InfractionCategory
             RuleFor(x => x.Name)
                 .NotEmpty()
                 .MaximumLength(150)
-                .MustAsync((dto, name, cancellationToken) => HaveUniqueNameAsync(dto.Id, name, cancellationToken))
+                .Must((dto, name) => HaveUniqueName(dto.Id, name))
                 .When(c => !string.IsNullOrEmpty(c.Name));
         }
 
-        private async Task<bool> HaveUniqueNameAsync(Guid idToExclude, string name, CancellationToken cancellationToken)
+        private bool HaveUniqueName(Guid idToExclude, string name)
         {
-            return !await _context.InfractionCategories
+            return !_context.InfractionCategories
                 .AsNoTracking()
-                .AnyAsync(c => c.Name.ToUpper().Equals(name.ToUpper()) && !c.Id.Equals(idToExclude), cancellationToken);
+                .Any(c => c.Name.ToUpper().Equals(name.ToUpper()) && !c.Id.Equals(idToExclude));
         }
     }
 }

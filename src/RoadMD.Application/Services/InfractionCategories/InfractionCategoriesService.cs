@@ -1,7 +1,13 @@
-﻿using MapsterMapper;
+﻿using LanguageExt;
+using LanguageExt.Common;
+using Mapster;
+using MapsterMapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using RoadMD.Application.Dto.Common;
 using RoadMD.Application.Dto.InfractionCategory;
+using RoadMD.Application.Exceptions;
+using RoadMD.Application.Services.Vehicles;
 using RoadMD.Domain.Entities;
 using RoadMD.EntityFrameworkCore;
 
@@ -9,11 +15,28 @@ namespace RoadMD.Application.Services.InfractionCategories
 {
     public class InfractionCategoriesService : ServiceBase, IInfractionCategoriesService
     {
-        public InfractionCategoriesService(ApplicationDbContext context, IMapper mapper) : base(context, mapper)
+        private readonly ILogger<InfractionCategoriesService> _logger;
+
+        public InfractionCategoriesService(ApplicationDbContext context, IMapper mapper,
+            ILogger<InfractionCategoriesService> logger) : base(context, mapper)
         {
+            _logger = logger;
         }
 
-        public async Task<List<LookupDto>> GetSelectListAsync(CancellationToken cancellationToken)
+        public async Task<Result<InfractionCategoryDto>> GetAsync(Guid id,
+            CancellationToken cancellationToken = default)
+        {
+            var dto = await Context.InfractionCategories
+                .Where(x => x.Id.Equals(id))
+                .ProjectToType<InfractionCategoryDto>()
+                .SingleOrDefaultAsync(cancellationToken);
+
+            return dto is null
+                ? new Result<InfractionCategoryDto>(new NotFoundException(nameof(InfractionCategory), id))
+                : new Result<InfractionCategoryDto>(dto);
+        }
+
+        public async Task<List<LookupDto>> GetSelectListAsync(CancellationToken cancellationToken = default)
         {
             return await Context.InfractionCategories
                 .OrderBy(x => x.Name)
@@ -21,43 +44,85 @@ namespace RoadMD.Application.Services.InfractionCategories
                 .ToListAsync(cancellationToken);
         }
 
-        public async Task<InfractionCategoryDto> CreateAsync(CreateInfractionCategoryDto createInfractionCategory,
-            CancellationToken cancellationToken)
+        public async Task<Result<InfractionCategoryDto>> CreateAsync(
+            CreateInfractionCategoryDto createInfractionCategory,
+            CancellationToken cancellationToken = default)
         {
             var entity = new InfractionCategory
             {
                 Name = createInfractionCategory.Name
             };
-
             await Context.InfractionCategories.AddAsync(entity, cancellationToken);
-            await Context.SaveChangesAsync(cancellationToken);
 
-            return Mapper.Map<InfractionCategoryDto>(entity);
+            try
+            {
+                await Context.SaveChangesAsync(cancellationToken);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Error on create new infraction category");
+                return new Result<InfractionCategoryDto>(e);
+            }
+
+            var dto = Mapper.Map<InfractionCategoryDto>(entity);
+
+            return new Result<InfractionCategoryDto>(dto);
         }
 
-        public async Task<InfractionCategoryDto> UpdateAsync(UpdateInfractionCategoryDto updateInfractionCategory,
-            CancellationToken cancellationToken)
+        public async Task<Result<InfractionCategoryDto>> UpdateAsync(UpdateInfractionCategoryDto input,
+            CancellationToken cancellationToken = default)
         {
             var entity = await Context.InfractionCategories
                 .SingleOrDefaultAsync(x =>
-                    x.Id.Equals(updateInfractionCategory.Id), cancellationToken: cancellationToken);
+                    x.Id.Equals(input.Id), cancellationToken: cancellationToken);
 
-            entity.Name = updateInfractionCategory.Name;
+            if (entity is null)
+            {
+                return new Result<InfractionCategoryDto>(new NotFoundException(nameof(InfractionCategory), input.Id));
+            }
+
+            entity.Name = input.Name;
 
             Context.InfractionCategories.Update(entity);
-            await Context.SaveChangesAsync(cancellationToken);
 
-            return Mapper.Map<InfractionCategoryDto>(entity);
+            try
+            {
+                await Context.SaveChangesAsync(cancellationToken);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Error on update infraction category \"{infractionCategoryId}\" ", input.Id);
+                return new Result<InfractionCategoryDto>(e);
+            }
+
+            var dto = Mapper.Map<InfractionCategoryDto>(entity);
+
+            return new Result<InfractionCategoryDto>(dto);
         }
 
-        public async Task DeleteAsync(Guid id, CancellationToken cancellationToken)
+        public async Task<Result<Unit>> DeleteAsync(Guid id, CancellationToken cancellationToken = default)
         {
             var entity = await Context.InfractionCategories
                 .SingleOrDefaultAsync(x =>
                     x.Id.Equals(id), cancellationToken: cancellationToken);
 
+            if (entity is null)
+            {
+                return new Result<Unit>(new NotFoundException(nameof(InfractionCategory), id));
+            }
+
             Context.InfractionCategories.Remove(entity);
-            await Context.SaveChangesAsync(cancellationToken);
+            try
+            {
+                await Context.SaveChangesAsync(cancellationToken);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Error on delete infraction category {infractionCategoryId}", id);
+                return new Result<Unit>(e);
+            }
+
+            return new Result<Unit>();
         }
     }
 }

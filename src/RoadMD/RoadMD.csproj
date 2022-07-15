@@ -13,13 +13,17 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.3.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.3.2" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\RoadMD.Application\RoadMD.Application.csproj" />
     <ProjectReference Include="..\RoadMD.Module.EmailSender\RoadMD.Module.EmailSender.csproj" />
     <ProjectReference Include="..\RoadMD.Modules.Abstractions\RoadMD.Modules.Abstractions.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Extensions\" />
   </ItemGroup>
 
 </Project>

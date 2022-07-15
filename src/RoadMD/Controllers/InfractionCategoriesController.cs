@@ -2,6 +2,7 @@
 using RoadMD.Application.Dto.Common;
 using RoadMD.Application.Dto.InfractionCategory;
 using RoadMD.Application.Services.InfractionCategories;
+using RoadMD.Extensions;
 
 namespace RoadMD.Controllers
 {
@@ -16,11 +17,28 @@ namespace RoadMD.Controllers
         }
 
         /// <summary>
+        ///     Get infraction category by id
+        /// </summary>
+        /// <param name="id">Infraction Category ID</param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        [HttpGet("{id:guid}")]
+        [ProducesResponseType(typeof(InfractionCategoryDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> Get([FromRoute] Guid id, CancellationToken cancellationToken = default)
+        {
+            var result = await _infractionCategoriesService.GetAsync(id, cancellationToken);
+
+            return result.ToOk(x => x);
+        }
+
+        /// <summary>
         ///     Select list all infraction categories
         /// </summary>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        [HttpGet]
+        [HttpGet("select-list")]
         [ProducesResponseType(typeof(IEnumerable<LookupDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetSelectList(CancellationToken cancellationToken = default)
@@ -40,7 +58,8 @@ namespace RoadMD.Controllers
         public async Task<IActionResult> Create([FromBody] CreateInfractionCategoryDto input,
             CancellationToken cancellationToken = default)
         {
-            return Ok(await _infractionCategoriesService.CreateAsync(input, cancellationToken));
+            var result = await _infractionCategoriesService.CreateAsync(input, cancellationToken);
+            return result.ToOk(infractionCategoryDto => infractionCategoryDto);
         }
 
         /// <summary>
@@ -58,9 +77,8 @@ namespace RoadMD.Controllers
             CancellationToken cancellationToken = default)
         {
             if (id != input.Id) return BadRequest("Wrong Id");
-            await _infractionCategoriesService.UpdateAsync(input, cancellationToken);
-
-            return NoContent();
+            var result = await _infractionCategoriesService.UpdateAsync(input, cancellationToken);
+            return result.ToNoContent();
         }
 
         /// <summary>
@@ -75,8 +93,8 @@ namespace RoadMD.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Delete([FromRoute] Guid id, CancellationToken cancellationToken = default)
         {
-            await _infractionCategoriesService.DeleteAsync(id, cancellationToken);
-            return NoContent();
+            var result = await _infractionCategoriesService.DeleteAsync(id, cancellationToken);
+            return result.ToNoContent();
         }
     }
 }

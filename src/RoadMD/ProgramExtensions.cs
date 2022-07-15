@@ -2,6 +2,7 @@
 using Mapster;
 using MapsterMapper;
 using Microsoft.EntityFrameworkCore;
+using RoadMD.Application.Dto.InfractionCategory;
 using RoadMD.Application.Dto.Vehicle;
 using RoadMD.Application.Services.InfractionCategories;
 using RoadMD.Application.Services.Vehicles;
@@ -82,6 +83,7 @@ namespace RoadMD
             services.AddScoped<IMapper, ServiceMapper>();
 
             config.NewConfig<Vehicle, VehicleDto>();
+            config.NewConfig<InfractionCategory, InfractionCategoryDto>();
         }
     }
 }

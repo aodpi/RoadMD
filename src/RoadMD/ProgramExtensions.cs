@@ -3,10 +3,13 @@ using Mapster;
 using MapsterMapper;
 using Microsoft.EntityFrameworkCore;
 using RoadMD.Application.Dto.InfractionCategory;
+using RoadMD.Application.Dto.ReportCategory;
 using RoadMD.Application.Dto.Vehicle;
 using RoadMD.Application.Services.InfractionCategories;
+using RoadMD.Application.Services.ReportCategories;
 using RoadMD.Application.Services.Vehicles;
 using RoadMD.Application.Validation.InfractionCategory;
+using RoadMD.Application.Validation.ReportCategory;
 using RoadMD.Application.Validation.Vehicle;
 using RoadMD.Domain.Entities;
 using RoadMD.EntityFrameworkCore;
@@ -29,6 +32,9 @@ namespace RoadMD
                     cfg.RegisterValidatorsFromAssemblyContaining<CreateVehicleValidator>();
                     cfg.RegisterValidatorsFromAssemblyContaining<CreateInfractionCategoryValidator>();
                     cfg.RegisterValidatorsFromAssemblyContaining<UpdateInfractionCategoryValidator>();
+
+                    cfg.RegisterValidatorsFromAssemblyContaining<CreateReportCategoryValidator>();
+                    cfg.RegisterValidatorsFromAssemblyContaining<UpdateReportCategoryValidator>();
                     cfg.DisableDataAnnotationsValidation = true;
                 });
 
@@ -58,6 +64,7 @@ namespace RoadMD
 
             services.AddScoped<IVehicleService, VehicleService>();
             services.AddScoped<IInfractionCategoriesService, InfractionCategoriesService>();
+            services.AddScoped<IReportCategoryService, ReportCategoryService>();
             services.AddScoped<IEmailSender, EmailSenderMailKit>();
         }
 
@@ -65,7 +72,7 @@ namespace RoadMD
         {
             if (app.Environment.IsDevelopment())
             {
-                app.UseSwagger(op => { op.SerializeAsV2 = true; });
+                app.UseSwagger();
 
                 app.UseSwaggerUI();
             }
@@ -84,6 +91,7 @@ namespace RoadMD
 
             config.NewConfig<Vehicle, VehicleDto>();
             config.NewConfig<InfractionCategory, InfractionCategoryDto>();
+            config.NewConfig<ReportCategory, ReportCategoryDto>();
         }
     }
 }

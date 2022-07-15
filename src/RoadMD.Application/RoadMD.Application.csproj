@@ -20,9 +20,12 @@
   <ItemGroup>
     <Folder Include="Dto\InfractionCategory\" />
     <Folder Include="Dto\Common\" />
+    <Folder Include="Dto\ReportCategory\" />
     <Folder Include="Services\InfractionCategories\" />
+    <Folder Include="Services\ReportCategories\" />
     <Folder Include="Validation\InfractionCategory\" />
     <Folder Include="Exceptions\" />
+    <Folder Include="Validation\ReportCategory\" />
   </ItemGroup>
 
 </Project>

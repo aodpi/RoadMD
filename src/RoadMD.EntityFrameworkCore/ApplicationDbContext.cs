@@ -11,6 +11,7 @@ namespace RoadMD.EntityFrameworkCore
 
         public DbSet<Vehicle> Vehicles { get; set; }
         public DbSet<InfractionCategory> InfractionCategories { get; set; }
+        public DbSet<ReportCategory> ReportCategories { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

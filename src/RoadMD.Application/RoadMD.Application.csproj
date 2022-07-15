@@ -8,12 +8,21 @@
 
   <ItemGroup>
     <PackageReference Include="FluentValidation" Version="11.1.0" />
+    <PackageReference Include="LanguageExt.Core" Version="4.2.9" />
     <PackageReference Include="Mapster.DependencyInjection" Version="1.0.0" />
     <PackageReference Include="Mapster.EFCore" Version="5.1.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\RoadMD.EntityFrameworkCore\RoadMD.EntityFrameworkCore.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Dto\InfractionCategory\" />
+    <Folder Include="Dto\Common\" />
+    <Folder Include="Services\InfractionCategories\" />
+    <Folder Include="Validation\InfractionCategory\" />
+    <Folder Include="Exceptions\" />
   </ItemGroup>
 
 </Project>

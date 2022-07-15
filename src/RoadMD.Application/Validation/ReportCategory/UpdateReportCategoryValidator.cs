@@ -3,21 +3,23 @@ using Microsoft.EntityFrameworkCore;
 using RoadMD.Application.Dto.InfractionCategory;
 using RoadMD.EntityFrameworkCore;
 
-namespace RoadMD.Application.Validation.InfractionCategory
+namespace RoadMD.Application.Validation.ReportCategory
 {
-    public class UpdateInfractionCategoryValidator : AbstractValidator<UpdateInfractionCategoryDto>
+    public class UpdateReportCategoryValidator : AbstractValidator<UpdateInfractionCategoryDto>
     {
         private readonly ApplicationDbContext _context;
 
-        public UpdateInfractionCategoryValidator(ApplicationDbContext context)
+        public UpdateReportCategoryValidator(ApplicationDbContext context)
         {
             _context = context;
 
+            RuleFor(x => x.Id)
+                .NotEmpty();
+
             RuleFor(x => x.Name)
-                .NotEmpty()
                 .MaximumLength(150)
                 .Must((dto, name) => HaveUniqueName(dto.Id, name))
-                .WithMessage("An infraction category with the same {PropertyName} already exists.")
+                .WithMessage("A report category with the same {PropertyName} already exists.")
                 .When(c => !string.IsNullOrEmpty(c.Name));
         }
 

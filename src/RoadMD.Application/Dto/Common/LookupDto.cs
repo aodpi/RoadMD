@@ -1,5 +1,6 @@
 ﻿namespace RoadMD.Application.Dto.Common
 {
+    [Serializable]
     public class LookupDto
     {
         public LookupDto(string key, string value)

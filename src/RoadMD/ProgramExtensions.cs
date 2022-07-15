@@ -6,6 +6,7 @@ using RoadMD.Application.Dto.InfractionCategory;
 using RoadMD.Application.Dto.ReportCategory;
 using RoadMD.Application.Dto.Vehicle;
 using RoadMD.Application.Services.InfractionCategories;
+using RoadMD.Application.Services.Infractions;
 using RoadMD.Application.Services.ReportCategories;
 using RoadMD.Application.Services.Vehicles;
 using RoadMD.Application.Validation.InfractionCategory;
@@ -65,6 +66,7 @@ namespace RoadMD
             services.AddScoped<IVehicleService, VehicleService>();
             services.AddScoped<IInfractionCategoriesService, InfractionCategoriesService>();
             services.AddScoped<IReportCategoryService, ReportCategoryService>();
+            services.AddScoped<IInfractionService, InfractionService>();
             services.AddScoped<IEmailSender, EmailSenderMailKit>();
         }
 

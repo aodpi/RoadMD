@@ -1,6 +1,5 @@
 ﻿namespace RoadMD.Application.Dto.Infraction.List
 {
-    [Serializable]
     public class InfractionListDto
     {
         public Guid Id { get; init; }
@@ -11,5 +10,4 @@
         public InfractionListLocationDto Location { get; init; }
         public InfractionListVehicleDto Vehicle { get; init; }
     }
-
 }

@@ -1,8 +1,5 @@
-﻿using System.Runtime.Serialization;
-
-namespace RoadMD.Application.Exceptions
+﻿namespace RoadMD.Application.Exceptions
 {
-    [Serializable]
     public class NotFoundException : Exception
     {
         public NotFoundException()
@@ -22,11 +19,6 @@ namespace RoadMD.Application.Exceptions
 
         public NotFoundException(string name, object key)
             : base($"Entity \"{name}\" ({key}) was not found.")
-        {
-        }
-
-        protected NotFoundException(SerializationInfo info, StreamingContext context)
-            : base(info, context)
         {
         }
     }

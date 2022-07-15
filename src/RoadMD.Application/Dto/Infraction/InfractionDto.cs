@@ -1,6 +1,5 @@
 ﻿namespace RoadMD.Application.Dto.Infraction
 {
-    [Serializable]
     public class InfractionDto
     {
         public Guid Id { get; set; }

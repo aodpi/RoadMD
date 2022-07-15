@@ -1,6 +1,5 @@
 ﻿namespace RoadMD.Application.Dto.Infraction.Create
 {
-    [Serializable]
     public class CreateInfractionDto
     {
         public string Name { get; init; }

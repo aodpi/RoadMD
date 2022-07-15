@@ -1,6 +1,5 @@
 ﻿namespace RoadMD.Application.Dto.Infraction.List
 {
-    [Serializable]
     public class InfractionListVehicleDto
     {
         public string LetterCode { get; init; }

@@ -2,6 +2,11 @@
 {
     public class Infraction : BaseEntity
     {
+        public Infraction()
+        {
+            Photos = new HashSet<Photo>();
+        }
+
         public string Name { get; set; }
         public string Description { get; set; }
 
@@ -13,5 +18,7 @@
 
         public Vehicle Vehicle { get; set; }
         public Guid VehicleId { get; set; }
+
+        public ICollection<Photo> Photos { get; set; }
     }
 }

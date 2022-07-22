@@ -21,5 +21,8 @@ namespace RoadMD.Application.Services.Infractions
             CancellationToken cancellationToken = default);
 
         Task<Result<Unit>> DeleteAsync(Guid id, CancellationToken cancellationToken = default);
+
+        Task<Result<Unit>> DeletePhotoAsync(Guid id, Guid photoId,
+            CancellationToken cancellationToken = default);
     }
 }

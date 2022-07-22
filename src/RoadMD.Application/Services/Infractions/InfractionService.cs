@@ -63,7 +63,14 @@ namespace RoadMD.Application.Services.Infractions
                 {
                     Longitude = input.Location.Longitude,
                     Latitude = input.Location.Latitude,
-                }
+                },
+                // TODO: Only for test
+                Photos = input.Photos
+                    .Select(x => new Photo
+                    {
+                        Name = "Test_Photo_name",
+                        Url = "https://google.com"
+                    }).ToList()
             };
 
             if (vehicle is null)
@@ -105,11 +112,11 @@ namespace RoadMD.Application.Services.Infractions
             if (infraction is null)
                 return new Result<InfractionDto>(new NotFoundException(nameof(Infraction), input.Id));
 
-            infraction.Name = input.Name;
-            infraction.Description = input.Description;
+            infraction.Name = input.Name!;
+            infraction.Description = input.Description!;
             infraction.CategoryId = input.CategoryId;
 
-            infraction.Location.Latitude = input.Location.Latitude;
+            infraction.Location.Latitude = input.Location!.Latitude;
             infraction.Location.Longitude = input.Location.Longitude;
 
             Context.Infractions.Update(infraction);
@@ -149,6 +156,32 @@ namespace RoadMD.Application.Services.Infractions
             catch (Exception e)
             {
                 _logger.LogError(e, "Error on delete infraction \"{InfractionId}\"", id);
+                return new Result<Unit>(e);
+            }
+
+            return new Result<Unit>();
+        }
+
+        public async Task<Result<Unit>> DeletePhotoAsync(Guid id, Guid photoId,
+            CancellationToken cancellationToken = default)
+        {
+            var photo = await Context.Photos
+                .Where(x => x.InfractionId.Equals(id) && x.Id.Equals(photoId))
+                .SingleOrDefaultAsync(cancellationToken);
+
+            if (photo is null)
+            {
+                return new Result<Unit>(new NotFoundException(nameof(Photo), id));
+            }
+
+            Context.Photos.Remove(photo);
+            try
+            {
+                await Context.SaveChangesAsync(cancellationToken);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Error on delete photo \"{PhotoId}\"", photoId);
                 return new Result<Unit>(e);
             }
 

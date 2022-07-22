@@ -101,5 +101,21 @@ namespace RoadMD.Controllers
 
             return result.ToNoContent();
         }
+
+        /// <summary>
+        ///     Delete infraction photo
+        /// </summary>
+        /// <param name="id">Infraction ID</param>
+        /// <param name="photoId">Photo Id</param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        [HttpDelete("{id:guid}/photo/{photoId:guid}")]
+        public async Task<IActionResult> DeletePhoto([FromRoute] Guid id, [FromRoute] Guid photoId,
+            CancellationToken cancellationToken = default)
+        {
+            var result = await _infractionService.DeletePhotoAsync(id, photoId, cancellationToken);
+
+            return result.ToNoContent();
+        }
     }
 }

@@ -20,6 +20,11 @@ namespace RoadMD.EntityFrameworkCore.Configurations
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Cascade);
 
+            builder.HasMany(x => x.Photos)
+                .WithOne(x => x.Infraction)
+                .HasForeignKey(x => x.InfractionId)
+                .OnDelete(DeleteBehavior.Cascade);
+
             base.Configure(builder);
         }
     }

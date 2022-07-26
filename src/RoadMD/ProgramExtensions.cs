@@ -109,13 +109,12 @@ namespace RoadMD
                 })
                 .Map(dest => dest.Vehicle, src => new InfractionVehicleDto
                 {
-                    NumberCode = src.Vehicle.NumberCode,
-                    LetterCode = src.Vehicle.LetterCode
+                    Number = src.Vehicle.Number
                 })
                 .Map(dest => dest.Photos, src => src.Photos.Select(photo => new InfractionPhotoDto
                 {
                     Name = photo.Name,
-                    Url = photo.Url,
+                    Url = photo.Url
                 }))
                 .IgnoreNonMapped(true);
 
@@ -131,8 +130,7 @@ namespace RoadMD
                 })
                 .Map(dest => dest.Vehicle, src => new InfractionListVehicleDto
                 {
-                    NumberCode = src.Vehicle.NumberCode,
-                    LetterCode = src.Vehicle.LetterCode
+                    Number = src.Vehicle.Number,
                 })
                 .IgnoreNonMapped(true);
         }

@@ -47,8 +47,7 @@ namespace RoadMD.Application.Services.Vehicles
         {
             var vehicle = new Vehicle
             {
-                LetterCode = input.LetterCode,
-                NumberCode = input.NumberCode
+                Number = input.Number
             };
 
             await Context.Vehicles.AddAsync(vehicle, cancellationToken);
@@ -77,8 +76,7 @@ namespace RoadMD.Application.Services.Vehicles
 
             if (entity is null) return new Result<VehicleDto>(new NotFoundException(nameof(Vehicle), input.Id));
 
-            entity.LetterCode = input.LetterCode;
-            entity.NumberCode = input.NumberCode;
+            entity.Number = input.Number;
 
             Context.Vehicles.Update(entity);
 

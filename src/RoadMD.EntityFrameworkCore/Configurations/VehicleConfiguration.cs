@@ -7,13 +7,12 @@ namespace RoadMD.EntityFrameworkCore.Configurations
     {
         public override void Configure(EntityTypeBuilder<Vehicle> builder)
         {
-            builder.Property(x => x.LetterCode)
+            builder.Property(x => x.Number)
                 .IsRequired()
-                .HasMaxLength(5);
+                .HasMaxLength(10);
 
-            builder.Property(x => x.NumberCode)
-                .IsRequired()
-                .HasMaxLength(5);
+            builder.HasIndex(x => x.Number)
+                .IsUnique();
 
             base.Configure(builder);
         }

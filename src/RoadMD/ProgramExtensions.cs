@@ -112,6 +112,11 @@ namespace RoadMD
                     NumberCode = src.Vehicle.NumberCode,
                     LetterCode = src.Vehicle.LetterCode
                 })
+                .Map(dest => dest.Photos, src => src.Photos.Select(photo => new InfractionPhotoDto
+                {
+                    Name = photo.Name,
+                    Url = photo.Url,
+                }))
                 .IgnoreNonMapped(true);
 
             config.NewConfig<Infraction, InfractionListDto>()

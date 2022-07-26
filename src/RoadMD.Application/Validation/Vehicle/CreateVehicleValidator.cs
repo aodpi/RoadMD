@@ -12,21 +12,19 @@ namespace RoadMD.Application.Validation.Vehicle
         {
             _context = context;
 
-            RuleFor(f => f.LetterCode)
-                .NotEmpty()
-                .WithMessage("Please provide the letter code");
 
-            RuleFor(f => f.NumberCode)
+            RuleFor(f => f.Number)
                 .NotEmpty()
-                .WithMessage("Please provide number code")
-                .When(f => !string.IsNullOrEmpty(f.LetterCode))
+                .WithMessage("Please provide number")
+                .MaximumLength(10)
+                .When(f => !string.IsNullOrEmpty(f.Number))
                 .Must(HaveUniqueNumber)
                 .WithMessage("A vehicle with the same number already exists");
         }
 
-        private bool HaveUniqueNumber(CreateVehicleDto dto, string numberCode)
+        private bool HaveUniqueNumber(CreateVehicleDto dto, string number)
         {
-            return !_context.Vehicles.Any(f => f.NumberCode == numberCode && f.LetterCode == dto.LetterCode);
+            return !_context.Vehicles.Any(f => f.Number.Equals(number));
         }
     }
 }

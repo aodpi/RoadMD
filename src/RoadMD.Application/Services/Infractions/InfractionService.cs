@@ -49,10 +49,7 @@ namespace RoadMD.Application.Services.Infractions
             CancellationToken cancellationToken = default)
         {
             var vehicle = await Context.Vehicles
-                .SingleOrDefaultAsync(x =>
-                        x.LetterCode.Equals(input.Vehicle.LetterCode) &&
-                        x.NumberCode.Equals(input.Vehicle.NumberCode),
-                    cancellationToken: cancellationToken);
+                .SingleOrDefaultAsync(x => x.Number.Equals(input.Vehicle.Number), cancellationToken: cancellationToken);
 
             var infraction = new Infraction
             {
@@ -77,8 +74,7 @@ namespace RoadMD.Application.Services.Infractions
             {
                 infraction.Vehicle = new Vehicle
                 {
-                    LetterCode = input.Vehicle.LetterCode,
-                    NumberCode = input.Vehicle.NumberCode,
+                    Number = input.Vehicle.Number,
                 };
             }
             else
@@ -106,18 +102,31 @@ namespace RoadMD.Application.Services.Infractions
             CancellationToken cancellationToken = default)
         {
             var infraction = await Context.Infractions
+                .Include(x => x.Vehicle)
                 .Include(x => x.Location)
                 .SingleOrDefaultAsync(x => x.Id.Equals(input.Id), cancellationToken: cancellationToken);
 
             if (infraction is null)
                 return new Result<InfractionDto>(new NotFoundException(nameof(Infraction), input.Id));
 
-            infraction.Name = input.Name!;
-            infraction.Description = input.Description!;
+            infraction.Name = input.Name;
+            infraction.Description = input.Description;
             infraction.CategoryId = input.CategoryId;
 
-            infraction.Location.Latitude = input.Location!.Latitude;
+            infraction.Location.Latitude = input.Location.Latitude;
             infraction.Location.Longitude = input.Location.Longitude;
+
+            if (!infraction.Vehicle.Number.Equals(input.Vehicle.Number))
+            {
+                var vehicle = await Context.Vehicles
+                    .SingleOrDefaultAsync(x => x.Number.Equals(input.Vehicle.Number),
+                        cancellationToken: cancellationToken) ?? new Vehicle
+                {
+                    Number = input.Vehicle.Number
+                };
+
+                infraction.Vehicle = vehicle;
+            }
 
             Context.Infractions.Update(infraction);
 

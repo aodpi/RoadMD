@@ -28,11 +28,9 @@ namespace RoadMD.Application.Validation.Infraction
 
             ClassLevelCascadeMode = CascadeMode.Stop;
 
-            RuleFor(x => x.Vehicle.NumberCode)
-                .NotEmpty();
-
-            RuleFor(x => x.Vehicle.LetterCode)
-                .NotEmpty();
+            RuleFor(x => x.Vehicle.Number)
+                .NotEmpty()
+                .MaximumLength(10);
         }
     }
 }

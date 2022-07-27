@@ -66,6 +66,18 @@ namespace RoadMD.Application.Services.Infractions
                 },
             };
 
+            if (vehicle is null)
+            {
+                infraction.Vehicle = new Vehicle
+                {
+                    Number = input.Vehicle.Number,
+                };
+            }
+            else
+            {
+                infraction.VehicleId = vehicle.Id;
+            }
+
             foreach (var photo in input.Photos)
             {
                 using var stream = photo.OpenReadStream();
@@ -78,18 +90,6 @@ namespace RoadMD.Application.Services.Infractions
                     Name = photo.FileName,
                     Url = Url,
                 });
-            }
-
-            if (vehicle is null)
-            {
-                infraction.Vehicle = new Vehicle
-                {
-                    Number = input.Vehicle.Number,
-                };
-            }
-            else
-            {
-                infraction.VehicleId = vehicle.Id;
             }
 
             await Context.Infractions.AddAsync(infraction, cancellationToken);
@@ -159,6 +159,7 @@ namespace RoadMD.Application.Services.Infractions
         public async Task<Result<Unit>> DeleteAsync(Guid id, CancellationToken cancellationToken = default)
         {
             var infraction = await Context.Infractions
+                .Include(f => f.Photos)
                 .SingleOrDefaultAsync(x => x.Id.Equals(id), cancellationToken);
 
             if (infraction is null)
@@ -170,6 +171,10 @@ namespace RoadMD.Application.Services.Infractions
 
             try
             {
+                foreach (var photo in infraction.Photos)
+                {
+                    await _photoStorage.DeletePhoto(photo.BlobName, cancellationToken);
+                }
                 await Context.SaveChangesAsync(cancellationToken);
             }
             catch (Exception e)

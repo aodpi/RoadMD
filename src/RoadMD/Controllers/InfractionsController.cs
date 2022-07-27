@@ -57,7 +57,8 @@ namespace RoadMD.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> Create([FromBody] CreateInfractionDto input,
+        [Consumes("multipart/form-data", IsOptional = false)]
+        public async Task<IActionResult> Create([FromForm] CreateInfractionDto input,
             CancellationToken cancellationToken = default)
         {
             var result = await _infractionService.CreateAsync(input, cancellationToken);

@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using RoadMD.Modules.Abstractions;
 
-namespace RoadMD.Module.EmailSender
+namespace RoadMD.Modules.Email
 {
     public class EmailSenderMailKit : IEmailSender
     {

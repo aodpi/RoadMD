@@ -1,4 +1,5 @@
-﻿using FluentValidation.AspNetCore;
+﻿using Azure.Storage.Blobs;
+using FluentValidation.AspNetCore;
 using Mapster;
 using MapsterMapper;
 using Microsoft.EntityFrameworkCore;
@@ -16,8 +17,9 @@ using RoadMD.Application.Validation.ReportCategory;
 using RoadMD.Application.Validation.Vehicle;
 using RoadMD.Domain.Entities;
 using RoadMD.EntityFrameworkCore;
-using RoadMD.Module.EmailSender;
 using RoadMD.Modules.Abstractions;
+using RoadMD.Modules.Email;
+using RoadMD.Modules.Storage;
 
 namespace RoadMD
 {
@@ -70,6 +72,15 @@ namespace RoadMD
             services.AddScoped<IReportCategoryService, ReportCategoryService>();
             services.AddScoped<IInfractionService, InfractionService>();
             services.AddScoped<IEmailSender, EmailSenderMailKit>();
+            services.AddScoped<IPhotoStorageService, PhotoStorageService>();
+            
+            // Service factory for blob client
+            services.AddScoped((sp) =>
+            {
+                var configuration = sp.GetRequiredService<IConfiguration>();
+                var connString = configuration.GetConnectionString("BlobStorage");
+                return new BlobServiceClient(connString);
+            });
         }
 
         public static void Configure(this WebApplication app)

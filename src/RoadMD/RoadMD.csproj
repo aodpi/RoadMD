@@ -18,7 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\RoadMD.Application\RoadMD.Application.csproj" />
-    <ProjectReference Include="..\RoadMD.Module.EmailSender\RoadMD.Module.EmailSender.csproj" />
+    <ProjectReference Include="..\RoadMD.Module.EmailSender\RoadMD.Modules.csproj" />
     <ProjectReference Include="..\RoadMD.Modules.Abstractions\RoadMD.Modules.Abstractions.csproj" />
   </ItemGroup>
 

@@ -18,9 +18,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoadMD.Application", "src\R
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoadMD.EntityFrameworkCore", "src\RoadMD.EntityFrameworkCore\RoadMD.EntityFrameworkCore.csproj", "{A3202D1F-25A0-4032-A934-7220E721EB15}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoadMD.Module.EmailSender", "src\RoadMD.Module.EmailSender\RoadMD.Module.EmailSender.csproj", "{E6DF6ECB-8B0A-46BE-B48F-10D29D015913}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoadMD.Modules", "src\RoadMD.Module.EmailSender\RoadMD.Modules.csproj", "{E6DF6ECB-8B0A-46BE-B48F-10D29D015913}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoadMD.Modules.Abstractions", "src\RoadMD.Modules.Abstractions\RoadMD.Modules.Abstractions.csproj", "{299DAFA5-D842-4D08-A39F-BBADCBA7AFCF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoadMD.Modules.Abstractions", "src\RoadMD.Modules.Abstractions\RoadMD.Modules.Abstractions.csproj", "{299DAFA5-D842-4D08-A39F-BBADCBA7AFCF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

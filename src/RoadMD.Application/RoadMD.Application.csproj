@@ -11,10 +11,12 @@
     <PackageReference Include="LanguageExt.Core" Version="4.2.9" />
     <PackageReference Include="Mapster.DependencyInjection" Version="1.0.0" />
     <PackageReference Include="Mapster.EFCore" Version="5.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="5.0.17" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\RoadMD.EntityFrameworkCore\RoadMD.EntityFrameworkCore.csproj" />
+    <ProjectReference Include="..\RoadMD.Module.EmailSender\RoadMD.Modules.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -24,6 +26,7 @@
     <Folder Include="Services\InfractionCategories\" />
     <Folder Include="Services\ReportCategories\" />
     <Folder Include="Services\Infractions\" />
+    <Folder Include="Services\Storage\" />
     <Folder Include="Validation\InfractionCategory\" />
     <Folder Include="Exceptions\" />
     <Folder Include="Validation\ReportCategory\" />

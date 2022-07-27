@@ -68,17 +68,16 @@ namespace RoadMD.Application.Services.Infractions
 
             foreach (var photo in input.Photos)
             {
-                using (var stream = photo.OpenReadStream())
-                {
-                    var result = await _photoStorage.StorePhoto(photo.FileName, stream, cancellationToken);
+                using var stream = photo.OpenReadStream();
 
-                    infraction.Photos.Add(new Photo
-                    {
-                        BlobName = result.BlobName,
-                        Name = photo.FileName,
-                        Url = result.Url,
-                    });
-                }
+                var (Url, BlobName) = await _photoStorage.StorePhoto(photo.FileName, stream, cancellationToken);
+
+                infraction.Photos.Add(new Photo
+                {
+                    BlobName = BlobName,
+                    Name = photo.FileName,
+                    Url = Url,
+                });
             }
 
             if (vehicle is null)

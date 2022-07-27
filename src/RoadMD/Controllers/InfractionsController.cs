@@ -8,6 +8,8 @@ using RoadMD.Extensions;
 
 namespace RoadMD.Controllers
 {
+    /// <summary>
+    /// </summary>
     [Route("api/infractions")]
     public class InfractionsController : ApiControllerBase
     {
@@ -57,7 +59,7 @@ namespace RoadMD.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [Consumes("multipart/form-data", IsOptional = false)]
+        [Consumes(typeof(CreateInfractionDto), "multipart/form-data", IsOptional = false)]
         public async Task<IActionResult> Create([FromForm] CreateInfractionDto input,
             CancellationToken cancellationToken = default)
         {

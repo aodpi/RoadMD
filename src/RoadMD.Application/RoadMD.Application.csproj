@@ -37,6 +37,7 @@
     <Folder Include="Exceptions\" />
     <Folder Include="Validation\ReportCategory\" />
     <Folder Include="Validation\Infraction\" />
+    <Folder Include="Validation\Common\" />
   </ItemGroup>
 
 </Project>

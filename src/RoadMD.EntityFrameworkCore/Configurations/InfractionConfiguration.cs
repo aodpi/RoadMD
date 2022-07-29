@@ -23,6 +23,13 @@ namespace RoadMD.EntityFrameworkCore.Configurations
             builder.HasMany(x => x.Photos)
                 .WithOne(x => x.Infraction)
                 .HasForeignKey(x => x.InfractionId)
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasMany(x => x.Reports)
+                .WithOne(x => x.Infraction)
+                .HasForeignKey(x => x.InfractionId)
+                .IsRequired(false)
                 .OnDelete(DeleteBehavior.Cascade);
 
             base.Configure(builder);

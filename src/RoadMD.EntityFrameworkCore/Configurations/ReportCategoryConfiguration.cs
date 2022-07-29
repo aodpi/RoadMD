@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using RoadMD.Domain.Entities;
 
 namespace RoadMD.EntityFrameworkCore.Configurations
@@ -12,6 +13,12 @@ namespace RoadMD.EntityFrameworkCore.Configurations
 
             builder.HasIndex(x => x.Name)
                 .IsUnique();
+
+            builder.HasMany(x => x.InfractionReports)
+                .WithOne(x => x.ReportCategory)
+                .HasForeignKey(x => x.ReportCategoryId)
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.Restrict);
 
             base.Configure(builder);
         }

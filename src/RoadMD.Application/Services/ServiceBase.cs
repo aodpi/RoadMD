@@ -9,7 +9,7 @@ namespace RoadMD.Application.Services
     /// </summary>
     public abstract class ServiceBase
     {
-        public ServiceBase(ApplicationDbContext context, IMapper mapper)
+        protected ServiceBase(ApplicationDbContext context, IMapper mapper)
         {
             Context = context;
             Mapper = mapper;

@@ -1,4 +1,5 @@
-﻿using FluentValidation.AspNetCore;
+﻿using Azure.Storage.Blobs;
+using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 using RoadMD.Application;
 using RoadMD.Application.Services.InfractionCategories;
@@ -6,8 +7,8 @@ using RoadMD.Application.Services.Infractions;
 using RoadMD.Application.Services.ReportCategories;
 using RoadMD.Application.Services.Vehicles;
 using RoadMD.EntityFrameworkCore;
-using RoadMD.Module.EmailSender;
-using RoadMD.Modules.Abstractions;
+using RoadMD.Module.AzurePhotoStorage;
+using RoadMD.Module.PhotoStorage.Abstractions;
 
 namespace RoadMD
 {
@@ -55,7 +56,15 @@ namespace RoadMD
             services.AddScoped<IInfractionCategoriesService, InfractionCategoriesService>();
             services.AddScoped<IReportCategoryService, ReportCategoryService>();
             services.AddScoped<IInfractionService, InfractionService>();
-            services.AddScoped<IEmailSender, EmailSenderMailKit>();
+            services.AddScoped<IPhotoStorageService, AzurePhotoStorageService>();
+            
+            // Service factory for blob client
+            services.AddScoped((sp) =>
+            {
+                var configuration = sp.GetRequiredService<IConfiguration>();
+                var connString = configuration.GetConnectionString("BlobStorage");
+                return new BlobServiceClient(connString);
+            });
         }
 
         public static void Configure(this WebApplication app)

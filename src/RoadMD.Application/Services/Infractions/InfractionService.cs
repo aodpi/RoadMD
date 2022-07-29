@@ -11,17 +11,20 @@ using RoadMD.Application.Dto.Infraction.Update;
 using RoadMD.Application.Exceptions;
 using RoadMD.Domain.Entities;
 using RoadMD.EntityFrameworkCore;
+using RoadMD.Module.PhotoStorage.Abstractions;
 
 namespace RoadMD.Application.Services.Infractions
 {
     public class InfractionService : ServiceBase, IInfractionService
     {
         private readonly ILogger<InfractionService> _logger;
+        private readonly IPhotoStorageService _photoStorage;
 
-        public InfractionService(ApplicationDbContext context, IMapper mapper, ILogger<InfractionService> logger) :
+        public InfractionService(ApplicationDbContext context, IMapper mapper, ILogger<InfractionService> logger, IPhotoStorageService photoStorage) :
             base(context, mapper)
         {
             _logger = logger;
+            _photoStorage = photoStorage;
         }
 
         public async Task<Result<InfractionDto>> GetAsync(Guid id, CancellationToken cancellationToken = default)
@@ -61,13 +64,6 @@ namespace RoadMD.Application.Services.Infractions
                     Longitude = input.Location.Longitude,
                     Latitude = input.Location.Latitude,
                 },
-                // TODO: Only for test
-                Photos = input.Photos
-                    .Select(x => new Photo
-                    {
-                        Name = "Test_Photo_name",
-                        Url = "https://google.com"
-                    }).ToList()
             };
 
             if (vehicle is null)
@@ -80,6 +76,20 @@ namespace RoadMD.Application.Services.Infractions
             else
             {
                 infraction.VehicleId = vehicle.Id;
+            }
+
+            foreach (var photo in input.Photos)
+            {
+                using var stream = photo.OpenReadStream();
+
+                var (Url, BlobName) = await _photoStorage.StorePhoto(photo.FileName, stream, cancellationToken);
+
+                infraction.Photos.Add(new Photo
+                {
+                    BlobName = BlobName,
+                    Name = photo.FileName,
+                    Url = Url,
+                });
             }
 
             await Context.Infractions.AddAsync(infraction, cancellationToken);
@@ -121,9 +131,9 @@ namespace RoadMD.Application.Services.Infractions
                 var vehicle = await Context.Vehicles
                     .SingleOrDefaultAsync(x => x.Number.Equals(input.Vehicle.Number),
                         cancellationToken: cancellationToken) ?? new Vehicle
-                {
-                    Number = input.Vehicle.Number
-                };
+                        {
+                            Number = input.Vehicle.Number
+                        };
 
                 infraction.Vehicle = vehicle;
             }
@@ -149,6 +159,7 @@ namespace RoadMD.Application.Services.Infractions
         public async Task<Result<Unit>> DeleteAsync(Guid id, CancellationToken cancellationToken = default)
         {
             var infraction = await Context.Infractions
+                .Include(f => f.Photos)
                 .SingleOrDefaultAsync(x => x.Id.Equals(id), cancellationToken);
 
             if (infraction is null)
@@ -160,6 +171,10 @@ namespace RoadMD.Application.Services.Infractions
 
             try
             {
+                var blobNames = infraction.Photos.Select(f => f.BlobName);
+
+                await _photoStorage.DeletePhotos(blobNames, cancellationToken);
+
                 await Context.SaveChangesAsync(cancellationToken);
             }
             catch (Exception e)
@@ -184,9 +199,11 @@ namespace RoadMD.Application.Services.Infractions
             }
 
             Context.Photos.Remove(photo);
+
             try
             {
                 await Context.SaveChangesAsync(cancellationToken);
+                await _photoStorage.DeletePhotos(new Guid[] { photo.BlobName }, cancellationToken);
             }
             catch (Exception e)
             {

@@ -7,6 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Services\Storage\**" />
+    <EmbeddedResource Remove="Services\Storage\**" />
+    <None Remove="Services\Storage\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="FluentValidation" Version="11.1.0" />
     <PackageReference Include="FluentValidation.AspNetCore" Version="11.1.2" />
     <PackageReference Include="LanguageExt.Core" Version="4.2.9" />
@@ -17,7 +23,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\RoadMD.EntityFrameworkCore\RoadMD.EntityFrameworkCore.csproj" />
-    <ProjectReference Include="..\RoadMD.Module.EmailSender\RoadMD.Modules.csproj" />
+    <ProjectReference Include="..\RoadMD.Module.PhotoStorage.Abstractions\RoadMD.Module.PhotoStorage.Abstractions.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -27,7 +33,6 @@
     <Folder Include="Services\InfractionCategories\" />
     <Folder Include="Services\ReportCategories\" />
     <Folder Include="Services\Infractions\" />
-    <Folder Include="Services\Storage\" />
     <Folder Include="Validation\InfractionCategory\" />
     <Folder Include="Exceptions\" />
     <Folder Include="Validation\ReportCategory\" />

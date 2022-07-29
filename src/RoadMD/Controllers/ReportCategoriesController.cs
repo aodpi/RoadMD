@@ -6,6 +6,9 @@ using RoadMD.Extensions;
 
 namespace RoadMD.Controllers
 {
+    /// <summary>
+    /// Report categories
+    /// </summary>
     [Route("api/report-categories")]
     public class ReportCategoriesController : ApiControllerBase
     {

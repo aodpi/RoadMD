@@ -15,9 +15,8 @@ using RoadMD.Application.Services.ReportCategories;
 using RoadMD.Application.Services.Vehicles;
 using RoadMD.Domain.Entities;
 using RoadMD.EntityFrameworkCore;
-using RoadMD.Modules.Abstractions;
-using RoadMD.Modules.Email;
-using RoadMD.Modules.Storage;
+using RoadMD.Module.AzurePhotoStorage;
+using RoadMD.Module.PhotoStorage.Abstractions;
 
 namespace RoadMD
 {
@@ -65,8 +64,7 @@ namespace RoadMD
             services.AddScoped<IInfractionCategoriesService, InfractionCategoriesService>();
             services.AddScoped<IReportCategoryService, ReportCategoryService>();
             services.AddScoped<IInfractionService, InfractionService>();
-            services.AddScoped<IEmailSender, EmailSenderMailKit>();
-            services.AddScoped<IPhotoStorageService, PhotoStorageService>();
+            services.AddScoped<IPhotoStorageService, AzurePhotoStorageService>();
             
             // Service factory for blob client
             services.AddScoped((sp) =>

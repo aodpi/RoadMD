@@ -16,9 +16,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\RoadMD.Module.AzurePhotoStorage\RoadMD.Module.AzurePhotoStorage.csproj" />
     <ProjectReference Include="..\RoadMD.Application\RoadMD.Application.csproj" />
-    <ProjectReference Include="..\RoadMD.Module.EmailSender\RoadMD.Modules.csproj" />
-    <ProjectReference Include="..\RoadMD.Modules.Abstractions\RoadMD.Modules.Abstractions.csproj" />
   </ItemGroup>
 
   <ItemGroup>

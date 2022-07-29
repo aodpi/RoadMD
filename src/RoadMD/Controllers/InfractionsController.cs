@@ -9,6 +9,7 @@ using RoadMD.Extensions;
 namespace RoadMD.Controllers
 {
     /// <summary>
+    /// Infractions
     /// </summary>
     [Route("api/infractions")]
     public class InfractionsController : ApiControllerBase

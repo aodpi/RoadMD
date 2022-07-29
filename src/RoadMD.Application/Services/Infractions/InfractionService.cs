@@ -11,7 +11,7 @@ using RoadMD.Application.Dto.Infraction.Update;
 using RoadMD.Application.Exceptions;
 using RoadMD.Domain.Entities;
 using RoadMD.EntityFrameworkCore;
-using RoadMD.Modules.Abstractions;
+using RoadMD.Module.PhotoStorage.Abstractions;
 
 namespace RoadMD.Application.Services.Infractions
 {
@@ -171,10 +171,10 @@ namespace RoadMD.Application.Services.Infractions
 
             try
             {
-                foreach (var photo in infraction.Photos)
-                {
-                    await _photoStorage.DeletePhoto(photo.BlobName, cancellationToken);
-                }
+                var blobNames = infraction.Photos.Select(f => f.BlobName);
+
+                await _photoStorage.DeletePhotos(blobNames, cancellationToken);
+
                 await Context.SaveChangesAsync(cancellationToken);
             }
             catch (Exception e)
@@ -203,7 +203,7 @@ namespace RoadMD.Application.Services.Infractions
             try
             {
                 await Context.SaveChangesAsync(cancellationToken);
-                await _photoStorage.DeletePhoto(photo.BlobName, cancellationToken);
+                await _photoStorage.DeletePhotos(new Guid[] { photo.BlobName }, cancellationToken);
             }
             catch (Exception e)
             {

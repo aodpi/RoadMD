@@ -1,16 +1,11 @@
 ﻿using FluentValidation;
-using Microsoft.AspNetCore.Http;
 using RoadMD.Application.Dto.Infraction.Create;
+using RoadMD.Application.Validation.Common;
 
 namespace RoadMD.Application.Validation.Infraction
 {
     public class CreateInfractionValidator : AbstractValidator<CreateInfractionDto>
     {
-        private static string[] allowedExtensions = new string[]
-        {
-            ".jpeg", ".jpg", ".png", ".bmp"
-        };
-
         public CreateInfractionValidator()
         {
             RuleFor(x => x.Name)
@@ -36,19 +31,8 @@ namespace RoadMD.Application.Validation.Infraction
                 .MaximumLength(10);
 
             RuleFor(f => f.Photos)
-                .ForEach(input =>
-                {
-                    input.Must(HaveSupportedExtension)
-                    .WithMessage((c, i) => $"{Path.GetExtension(i.FileName)} is not a valid photo");
-                })
+                .ForEach(input => { input.SetValidator(new PhotoValidator()); })
                 .WithMessage("One of the photos is invalid");
-        }
-
-        private static bool HaveSupportedExtension(IFormFile file)
-        {
-            var ext = Path.GetExtension(file.FileName);
-
-            return allowedExtensions.Contains(ext);
         }
     }
 }

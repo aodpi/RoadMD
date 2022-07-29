@@ -3,6 +3,8 @@ using RoadMD.Application.Dto.Infraction;
 using RoadMD.Application.Dto.Infraction.Create;
 using RoadMD.Application.Dto.Infraction.List;
 using RoadMD.Application.Dto.Infraction.Update;
+using RoadMD.Application.Dto.InfractionReport;
+using RoadMD.Application.Services.InfractionReports;
 using RoadMD.Application.Services.Infractions;
 using RoadMD.Extensions;
 
@@ -15,10 +17,13 @@ namespace RoadMD.Controllers
     public class InfractionsController : ApiControllerBase
     {
         private readonly IInfractionService _infractionService;
+        private readonly IInfractionReportService _infractionReportService;
 
-        public InfractionsController(IInfractionService infractionService)
+        public InfractionsController(IInfractionService infractionService,
+            IInfractionReportService infractionReportService)
         {
             _infractionService = infractionService;
+            _infractionReportService = infractionReportService;
         }
 
         /// <summary>
@@ -35,7 +40,7 @@ namespace RoadMD.Controllers
         {
             var result = await _infractionService.GetAsync(id, cancellationToken);
 
-            return result.ToOk(x => x);
+            return result.ToOk();
         }
 
         /// <summary>
@@ -66,7 +71,7 @@ namespace RoadMD.Controllers
         {
             var result = await _infractionService.CreateAsync(input, cancellationToken);
 
-            return result.ToOk(x => x);
+            return result.ToOk();
         }
 
         /// <summary>
@@ -118,6 +123,59 @@ namespace RoadMD.Controllers
             CancellationToken cancellationToken = default)
         {
             var result = await _infractionService.DeletePhotoAsync(id, photoId, cancellationToken);
+
+            return result.ToNoContent();
+        }
+
+        /// <summary>
+        ///     Create new infraction report
+        /// </summary>
+        /// <param name="id">Infraction ID</param>
+        /// <param name="input">Create infraction report object</param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        [HttpPost("{id:guid}/report")]
+        public async Task<IActionResult> AddReport([FromRoute] Guid id, [FromBody] CreateInfractionReportDto input,
+            CancellationToken cancellationToken = default)
+        {
+            if (id != input.InfractionId) return BadRequest("Wrong ID");
+            var result = await _infractionReportService.CreateAsync(input, cancellationToken);
+
+            return result.ToOk();
+        }
+
+        /// <summary>
+        ///     Update infraction report
+        /// </summary>
+        /// <param name="id">Infraction ID</param>
+        /// <param name="reportId">Infraction report ID</param>
+        /// <param name="input">Update infraction report object</param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        [HttpPut("{id:guid}/report/{reportId:guid}")]
+        public async Task<IActionResult> UpdateReport([FromRoute] Guid id, [FromRoute] Guid reportId,
+            [FromBody] UpdateInfractionReportDto input, CancellationToken cancellationToken = default)
+        {
+            if (id != input.InfractionId) return BadRequest("Wrong ID");
+            if (reportId != input.Id) return BadRequest("Wrong report ID");
+
+            var result = await _infractionReportService.UpdateAsync(input, cancellationToken);
+
+            return result.ToNoContent();
+        }
+
+        /// <summary>
+        ///     Delete infraction report
+        /// </summary>
+        /// <param name="id">Infraction ID</param>
+        /// <param name="reportId">Infraction report ID</param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        [HttpDelete("{id:guid}/report/{reportId:guid}")]
+        public async Task<IActionResult> DeleteReport([FromRoute] Guid id, [FromRoute] Guid reportId,
+            CancellationToken cancellationToken = default)
+        {
+            var result = await _infractionReportService.DeleteAsync(reportId, cancellationToken);
 
             return result.ToNoContent();
         }

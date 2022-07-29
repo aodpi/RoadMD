@@ -5,6 +5,7 @@
         public Infraction()
         {
             Photos = new HashSet<Photo>();
+            Reports = new HashSet<InfractionReport>();
         }
 
         public string Name { get; set; }
@@ -20,5 +21,6 @@
         public Guid VehicleId { get; set; }
 
         public ICollection<Photo> Photos { get; set; }
+        public ICollection<InfractionReport> Reports { get; set; }
     }
 }

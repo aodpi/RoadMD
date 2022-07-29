@@ -9,6 +9,7 @@ using RoadMD.Application.Services.Vehicles;
 using RoadMD.EntityFrameworkCore;
 using RoadMD.Module.AzurePhotoStorage;
 using RoadMD.Module.PhotoStorage.Abstractions;
+using Swashbuckle.AspNetCore.SwaggerUI;
 
 namespace RoadMD
 {
@@ -51,13 +52,13 @@ namespace RoadMD
             });
 
             services.AddRoadMdMappings();
-          
+
             services.AddScoped<IVehicleService, VehicleService>();
             services.AddScoped<IInfractionCategoriesService, InfractionCategoriesService>();
             services.AddScoped<IReportCategoryService, ReportCategoryService>();
             services.AddScoped<IInfractionService, InfractionService>();
             services.AddScoped<IPhotoStorageService, AzurePhotoStorageService>();
-            
+
             // Service factory for blob client
             services.AddScoped((sp) =>
             {
@@ -73,7 +74,14 @@ namespace RoadMD
             {
                 app.UseSwagger();
 
-                app.UseSwaggerUI();
+                app.UseSwaggerUI(options =>
+                {
+                    options.ConfigObject = new ConfigObject
+                    {
+                        DocExpansion = DocExpansion.None,
+                        DisplayRequestDuration = true
+                    };
+                });
             }
 
             app.UseHttpsRedirection();

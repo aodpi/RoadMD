@@ -1,6 +1,6 @@
 ﻿namespace RoadMD.Application.Dto.Infraction.List
 {
-    public class InfractionListDto
+    public class InfractionListDto 
     {
         public Guid Id { get; init; }
         public string? Name { get; init; }

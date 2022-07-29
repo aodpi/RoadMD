@@ -3,6 +3,7 @@ using FluentValidation.AspNetCore;
 using Mapster;
 using MapsterMapper;
 using Microsoft.EntityFrameworkCore;
+using RoadMD.Application;
 using RoadMD.Application.Dto.Infraction;
 using RoadMD.Application.Dto.Infraction.List;
 using RoadMD.Application.Dto.InfractionCategory;
@@ -12,9 +13,6 @@ using RoadMD.Application.Services.InfractionCategories;
 using RoadMD.Application.Services.Infractions;
 using RoadMD.Application.Services.ReportCategories;
 using RoadMD.Application.Services.Vehicles;
-using RoadMD.Application.Validation.InfractionCategory;
-using RoadMD.Application.Validation.ReportCategory;
-using RoadMD.Application.Validation.Vehicle;
 using RoadMD.Domain.Entities;
 using RoadMD.EntityFrameworkCore;
 using RoadMD.Modules.Abstractions;
@@ -30,16 +28,12 @@ namespace RoadMD
     {
         public static void ConfigureServices(this IServiceCollection services, IConfigurationRoot configuration)
         {
+            services.AddRoadMdValidators();
+
             services.AddControllers()
                 .AddFluentValidation(cfg =>
                 {
                     cfg.AutomaticValidationEnabled = true;
-                    cfg.RegisterValidatorsFromAssemblyContaining<CreateVehicleValidator>();
-                    cfg.RegisterValidatorsFromAssemblyContaining<CreateInfractionCategoryValidator>();
-                    cfg.RegisterValidatorsFromAssemblyContaining<UpdateInfractionCategoryValidator>();
-
-                    cfg.RegisterValidatorsFromAssemblyContaining<CreateReportCategoryValidator>();
-                    cfg.RegisterValidatorsFromAssemblyContaining<UpdateReportCategoryValidator>();
                     cfg.DisableDataAnnotationsValidation = true;
                 });
 
@@ -48,7 +42,7 @@ namespace RoadMD
             services.AddSwaggerGen(f =>
             {
                 f.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, $"{nameof(RoadMD)}.xml"), true);
-                f.CustomSchemaIds((type) =>
+                f.CustomSchemaIds(type =>
                 {
                     var returnedValue = type.Name;
 

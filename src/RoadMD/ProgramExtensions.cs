@@ -26,7 +26,7 @@ namespace RoadMD
     {
         public static void ConfigureServices(this IServiceCollection services, IConfigurationRoot configuration)
         {
-            services.AddApplicationServices(configuration);
+            services.AddRoadMdValidators();
 
             services.AddControllers()
                 .AddFluentValidation(cfg =>
@@ -40,7 +40,7 @@ namespace RoadMD
             services.AddSwaggerGen(f =>
             {
                 f.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, $"{nameof(RoadMD)}.xml"), true);
-                f.CustomSchemaIds((type) =>
+                f.CustomSchemaIds(type =>
                 {
                     var returnedValue = type.Name;
 

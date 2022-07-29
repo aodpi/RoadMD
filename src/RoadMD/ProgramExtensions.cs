@@ -1,19 +1,11 @@
 ﻿using Azure.Storage.Blobs;
 using FluentValidation.AspNetCore;
-using Mapster;
-using MapsterMapper;
 using Microsoft.EntityFrameworkCore;
 using RoadMD.Application;
-using RoadMD.Application.Dto.Infraction;
-using RoadMD.Application.Dto.Infraction.List;
-using RoadMD.Application.Dto.InfractionCategory;
-using RoadMD.Application.Dto.ReportCategory;
-using RoadMD.Application.Dto.Vehicle;
 using RoadMD.Application.Services.InfractionCategories;
 using RoadMD.Application.Services.Infractions;
 using RoadMD.Application.Services.ReportCategories;
 using RoadMD.Application.Services.Vehicles;
-using RoadMD.Domain.Entities;
 using RoadMD.EntityFrameworkCore;
 using RoadMD.Module.AzurePhotoStorage;
 using RoadMD.Module.PhotoStorage.Abstractions;
@@ -58,8 +50,8 @@ namespace RoadMD
                 op.UseSqlServer(configuration.GetConnectionString("Default"));
             });
 
-            ConfigureMappings(services);
-
+            services.AddRoadMdMappings();
+          
             services.AddScoped<IVehicleService, VehicleService>();
             services.AddScoped<IInfractionCategoriesService, InfractionCategoriesService>();
             services.AddScoped<IReportCategoryService, ReportCategoryService>();
@@ -87,55 +79,6 @@ namespace RoadMD
             app.UseHttpsRedirection();
 
             app.MapControllers();
-        }
-
-        private static void ConfigureMappings(IServiceCollection services)
-        {
-            var config = new TypeAdapterConfig();
-
-            services.AddSingleton(config);
-            services.AddScoped<IMapper, ServiceMapper>();
-
-            config.NewConfig<Vehicle, VehicleDto>();
-            config.NewConfig<InfractionCategory, InfractionCategoryDto>();
-            config.NewConfig<ReportCategory, ReportCategoryDto>();
-
-            config.NewConfig<Infraction, InfractionDto>()
-                .Map(dest => dest.Id, src => src.Id)
-                .Map(dest => dest.Name, src => src.Name)
-                .Map(dest => dest.Description, src => src.Description)
-                .Map(dest => dest.CategoryId, src => src.CategoryId)
-                .Map(dest => dest.Location, src => new InfractionLocationDto
-                {
-                    Longitude = src.Location.Longitude,
-                    Latitude = src.Location.Latitude
-                })
-                .Map(dest => dest.Vehicle, src => new InfractionVehicleDto
-                {
-                    Number = src.Vehicle.Number
-                })
-                .Map(dest => dest.Photos, src => src.Photos.Select(photo => new InfractionPhotoDto
-                {
-                    Name = photo.Name,
-                    Url = photo.Url
-                }))
-                .IgnoreNonMapped(true);
-
-            config.NewConfig<Infraction, InfractionListDto>()
-                .Map(dest => dest.Id, src => src.Id)
-                .Map(dest => dest.Name, src => src.Name)
-                .Map(dest => dest.Description, src => src.Description)
-                .Map(dest => dest.CategoryName, src => src.Category.Name)
-                .Map(dest => dest.Location, src => new InfractionListLocationDto
-                {
-                    Longitude = src.Location.Longitude,
-                    Latitude = src.Location.Latitude
-                })
-                .Map(dest => dest.Vehicle, src => new InfractionListVehicleDto
-                {
-                    Number = src.Vehicle.Number,
-                })
-                .IgnoreNonMapped(true);
         }
     }
 }

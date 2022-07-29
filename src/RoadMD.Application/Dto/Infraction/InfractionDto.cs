@@ -1,6 +1,8 @@
-﻿namespace RoadMD.Application.Dto.Infraction
+﻿using Mapster;
+
+namespace RoadMD.Application.Dto.Infraction
 {
-    public class InfractionDto
+    public class InfractionDto : IRegister
     {
         public InfractionDto()
         {
@@ -16,5 +18,29 @@
         public InfractionVehicleDto? Vehicle { get; init; }
 
         public IEnumerable<InfractionPhotoDto> Photos { get; init; }
+
+        public void Register(TypeAdapterConfig config)
+        {
+            config.NewConfig<Domain.Entities.Infraction, InfractionDto>()
+                .Map(dest => dest.Id, src => src.Id)
+                .Map(dest => dest.Name, src => src.Name)
+                .Map(dest => dest.Description, src => src.Description)
+                .Map(dest => dest.CategoryId, src => src.CategoryId)
+                .Map(dest => dest.Location, src => new InfractionLocationDto
+                {
+                    Longitude = src.Location.Longitude,
+                    Latitude = src.Location.Latitude
+                })
+                .Map(dest => dest.Vehicle, src => new InfractionVehicleDto
+                {
+                    Number = src.Vehicle.Number
+                })
+                .Map(dest => dest.Photos, src => src.Photos.Select(photo => new InfractionPhotoDto
+                {
+                    Name = photo.Name,
+                    Url = photo.Url
+                }))
+                .IgnoreNonMapped(true);
+        }
     }
 }

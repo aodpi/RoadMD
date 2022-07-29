@@ -44,7 +44,7 @@ namespace RoadMD.Application.Services.Infractions
         {
             return await Context.Infractions
                 .OrderBy(x => x.Name)
-                .ProjectToType<InfractionListDto>()
+                .ProjectToType<InfractionListDto>(Mapper.Config)
                 .ToListAsync(cancellationToken);
         }
 

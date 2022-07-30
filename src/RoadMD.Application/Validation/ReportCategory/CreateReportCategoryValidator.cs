@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 using Microsoft.EntityFrameworkCore;
-using RoadMD.Application.Dto.ReportCategory;
+using RoadMD.Application.Dto.ReportCategories;
 using RoadMD.EntityFrameworkCore;
 
 namespace RoadMD.Application.Validation.ReportCategory

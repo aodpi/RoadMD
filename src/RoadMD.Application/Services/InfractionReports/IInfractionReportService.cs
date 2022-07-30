@@ -1,6 +1,6 @@
 ﻿using LanguageExt;
 using LanguageExt.Common;
-using RoadMD.Application.Dto.InfractionReport;
+using RoadMD.Application.Dto.InfractionReports;
 
 namespace RoadMD.Application.Services.InfractionReports
 {

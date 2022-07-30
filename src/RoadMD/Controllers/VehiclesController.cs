@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using RoadMD.Application.Dto.Vehicle;
+using RoadMD.Application.Dto.Vehicles;
 using RoadMD.Application.Services.Vehicles;
 using System.ComponentModel.DataAnnotations;
 using RoadMD.Extensions;

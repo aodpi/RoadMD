@@ -1,7 +1,7 @@
 ﻿using LanguageExt;
 using LanguageExt.Common;
 using RoadMD.Application.Dto.Common;
-using RoadMD.Application.Dto.InfractionCategory;
+using RoadMD.Application.Dto.InfractionCategories;
 
 namespace RoadMD.Application.Services.InfractionCategories
 {

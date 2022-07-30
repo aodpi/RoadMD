@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RoadMD.Application.Dto.Common;
-using RoadMD.Application.Dto.InfractionCategory;
+using RoadMD.Application.Dto.InfractionCategories;
 using RoadMD.Application.Services.InfractionCategories;
 using RoadMD.Extensions;
 

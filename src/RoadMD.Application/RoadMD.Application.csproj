@@ -27,9 +27,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Dto\InfractionCategory\" />
+    <Folder Include="Dto\InfractionCategories\" />
     <Folder Include="Dto\Common\" />
-    <Folder Include="Dto\ReportCategory\" />
+    <Folder Include="Dto\ReportCategories\" />
     <Folder Include="Services\InfractionCategories\" />
     <Folder Include="Services\ReportCategories\" />
     <Folder Include="Services\Infractions\" />

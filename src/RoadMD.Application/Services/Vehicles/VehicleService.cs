@@ -4,7 +4,7 @@ using Mapster;
 using MapsterMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using RoadMD.Application.Dto.Vehicle;
+using RoadMD.Application.Dto.Vehicles;
 using RoadMD.Application.Exceptions;
 using RoadMD.Domain.Entities;
 using RoadMD.EntityFrameworkCore;

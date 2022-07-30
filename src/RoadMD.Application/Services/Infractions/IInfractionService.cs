@@ -1,9 +1,9 @@
 ﻿using LanguageExt;
 using LanguageExt.Common;
-using RoadMD.Application.Dto.Infraction;
-using RoadMD.Application.Dto.Infraction.Create;
-using RoadMD.Application.Dto.Infraction.List;
-using RoadMD.Application.Dto.Infraction.Update;
+using RoadMD.Application.Dto.Infractions;
+using RoadMD.Application.Dto.Infractions.Create;
+using RoadMD.Application.Dto.Infractions.List;
+using RoadMD.Application.Dto.Infractions.Update;
 
 namespace RoadMD.Application.Services.Infractions
 {

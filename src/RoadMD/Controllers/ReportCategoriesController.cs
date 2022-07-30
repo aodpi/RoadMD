@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RoadMD.Application.Dto.Common;
-using RoadMD.Application.Dto.ReportCategory;
+using RoadMD.Application.Dto.ReportCategories;
 using RoadMD.Application.Services.ReportCategories;
 using RoadMD.Extensions;
 

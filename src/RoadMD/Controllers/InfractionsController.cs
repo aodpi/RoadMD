@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using RoadMD.Application.Dto.Infraction;
-using RoadMD.Application.Dto.Infraction.Create;
-using RoadMD.Application.Dto.Infraction.List;
-using RoadMD.Application.Dto.Infraction.Update;
-using RoadMD.Application.Dto.InfractionReport;
+using RoadMD.Application.Dto.Infractions;
+using RoadMD.Application.Dto.Infractions.Create;
+using RoadMD.Application.Dto.Infractions.List;
+using RoadMD.Application.Dto.Infractions.Update;
+using RoadMD.Application.Dto.InfractionReports;
 using RoadMD.Application.Services.InfractionReports;
 using RoadMD.Application.Services.Infractions;
 using RoadMD.Extensions;

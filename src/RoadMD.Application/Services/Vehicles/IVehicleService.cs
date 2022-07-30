@@ -1,6 +1,6 @@
 ﻿using LanguageExt;
 using LanguageExt.Common;
-using RoadMD.Application.Dto.Vehicle;
+using RoadMD.Application.Dto.Vehicles;
 
 namespace RoadMD.Application.Services.Vehicles
 {

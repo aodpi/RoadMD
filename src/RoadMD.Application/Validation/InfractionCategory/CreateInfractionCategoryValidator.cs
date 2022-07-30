@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 using Microsoft.EntityFrameworkCore;
-using RoadMD.Application.Dto.InfractionCategory;
+using RoadMD.Application.Dto.InfractionCategories;
 using RoadMD.EntityFrameworkCore;
 
 namespace RoadMD.Application.Validation.InfractionCategory

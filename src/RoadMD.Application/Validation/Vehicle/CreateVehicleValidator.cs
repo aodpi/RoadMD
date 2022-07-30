@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using RoadMD.Application.Dto.Vehicle;
+using RoadMD.Application.Dto.Vehicles;
 using RoadMD.EntityFrameworkCore;
 
 namespace RoadMD.Application.Validation.Vehicle

@@ -1,7 +1,7 @@
 ﻿using LanguageExt;
 using LanguageExt.Common;
 using RoadMD.Application.Dto.Common;
-using RoadMD.Application.Dto.ReportCategory;
+using RoadMD.Application.Dto.ReportCategories;
 
 namespace RoadMD.Application.Services.ReportCategories
 {

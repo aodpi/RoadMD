@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using RoadMD.Application.Dto.Infraction.Create;
+using RoadMD.Application.Dto.Infractions.Create;
 using RoadMD.Application.Validation.Common;
 
 namespace RoadMD.Application.Validation.Infraction

@@ -11,6 +11,6 @@ namespace RoadMD.Application.Dto.Infractions.Create
 
         public CreateInfractionLocationDto Location { get; init; }
         public CreateInfractionVehicleDto Vehicle { get; init; }
-        public IFormFileCollection Photos { get; init; }
+        public IFormFileCollection? Photos { get; init; }
     }
 }

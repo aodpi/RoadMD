@@ -10,7 +10,7 @@ namespace RoadMD.Extensions
     {
         public static IActionResult ToOk<TResult>(this Result<TResult> result)
         {
-            return result.Match(_ => new OkObjectResult(result), Fail);
+            return result.Match(obj => new OkObjectResult(obj), Fail);
         }
 
         public static IActionResult ToOk<TResult, TContract>(this Result<TResult> result,

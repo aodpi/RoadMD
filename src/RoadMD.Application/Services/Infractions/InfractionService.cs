@@ -48,7 +48,8 @@ namespace RoadMD.Application.Services.Infractions
                 .ToListAsync(cancellationToken);
         }
 
-        public async Task<Result<InfractionDto>> CreateAsync(CreateInfractionDto input, CancellationToken cancellationToken = default)
+        public async Task<Result<InfractionDto>> CreateAsync(CreateInfractionDto input,
+            CancellationToken cancellationToken = default)
         {
             var vehicle = await Context.Vehicles
                 .SingleOrDefaultAsync(x => x.Number.Equals(input.Vehicle.Number), cancellationToken: cancellationToken);
@@ -61,15 +62,15 @@ namespace RoadMD.Application.Services.Infractions
                 Location = new Location
                 {
                     Longitude = input.Location.Longitude,
-                    Latitude = input.Location.Latitude,
-                },
+                    Latitude = input.Location.Latitude
+                }
             };
 
             if (vehicle is null)
             {
                 infraction.Vehicle = new Vehicle
                 {
-                    Number = input.Vehicle.Number,
+                    Number = input.Vehicle.Number
                 };
             }
             else
@@ -77,18 +78,21 @@ namespace RoadMD.Application.Services.Infractions
                 infraction.VehicleId = vehicle.Id;
             }
 
-            foreach (var photo in input.Photos)
+            if (input.Photos is not null && input.Photos.Any())
             {
-                using var stream = photo.OpenReadStream();
-
-                var (Url, BlobName) = await _photoStorage.StorePhoto(photo.FileName, stream, cancellationToken);
-
-                infraction.Photos.Add(new Photo
+                foreach (var photo in input.Photos)
                 {
-                    BlobName = BlobName,
-                    Name = photo.FileName,
-                    Url = Url,
-                });
+                    await using var stream = photo.OpenReadStream();
+
+                    var (url, blobName) = await _photoStorage.StorePhoto(photo.FileName, stream, cancellationToken);
+
+                    infraction.Photos.Add(new Photo
+                    {
+                        BlobName = blobName,
+                        Name = photo.FileName,
+                        Url = url
+                    });
+                }
             }
 
             await Context.Infractions.AddAsync(infraction, cancellationToken);
@@ -107,7 +111,8 @@ namespace RoadMD.Application.Services.Infractions
             return new Result<InfractionDto>(infractionDto);
         }
 
-        public async Task<Result<InfractionDto>> UpdateAsync(UpdateInfractionDto input, CancellationToken cancellationToken = default)
+        public async Task<Result<InfractionDto>> UpdateAsync(UpdateInfractionDto input,
+            CancellationToken cancellationToken = default)
         {
             var infraction = await Context.Infractions
                 .Include(x => x.Vehicle)
@@ -184,7 +189,8 @@ namespace RoadMD.Application.Services.Infractions
             return new Result<Unit>();
         }
 
-        public async Task<Result<Unit>> DeletePhotoAsync(Guid id, Guid photoId, CancellationToken cancellationToken = default)
+        public async Task<Result<Unit>> DeletePhotoAsync(Guid id, Guid photoId,
+            CancellationToken cancellationToken = default)
         {
             var photo = await Context.Photos
                 .Where(x => x.InfractionId.Equals(id) && x.Id.Equals(photoId))

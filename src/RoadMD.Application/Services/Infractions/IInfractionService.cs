@@ -13,7 +13,7 @@ namespace RoadMD.Application.Services.Infractions
     {
         Task<Result<InfractionDto>> GetAsync(Guid id, CancellationToken cancellationToken = default);
 
-        Task<PaginatedListDto<InfractionListDto>> GetListAsync(SieveModel sieveModel,
+        Task<PaginatedListDto<InfractionListDto>> GetListAsync(SieveModel queryParams,
             CancellationToken cancellationToken = default);
 
         Task<Result<InfractionDto>> CreateAsync(CreateInfractionDto input,

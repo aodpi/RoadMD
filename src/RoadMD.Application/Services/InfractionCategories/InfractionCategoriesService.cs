@@ -7,9 +7,9 @@ using Microsoft.Extensions.Logging;
 using RoadMD.Application.Dto.Common;
 using RoadMD.Application.Dto.InfractionCategories;
 using RoadMD.Application.Exceptions;
-using RoadMD.Application.Services.Vehicles;
 using RoadMD.Domain.Entities;
 using RoadMD.EntityFrameworkCore;
+using Sieve.Services;
 
 namespace RoadMD.Application.Services.InfractionCategories
 {
@@ -18,7 +18,7 @@ namespace RoadMD.Application.Services.InfractionCategories
         private readonly ILogger<InfractionCategoriesService> _logger;
 
         public InfractionCategoriesService(ApplicationDbContext context, IMapper mapper,
-            ILogger<InfractionCategoriesService> logger) : base(context, mapper)
+            ILogger<InfractionCategoriesService> logger, ISieveProcessor sieveProcessor) : base(context, mapper, sieveProcessor)
         {
             _logger = logger;
         }

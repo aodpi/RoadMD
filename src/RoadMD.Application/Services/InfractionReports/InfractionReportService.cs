@@ -18,14 +18,12 @@ namespace RoadMD.Application.Services.InfractionReports
     public class InfractionReportService : ServiceBase, IInfractionReportService
     {
         private readonly ILogger<InfractionReportService> _logger;
-        private readonly ISieveProcessor _sieveProcessor;
 
         /// <inheritdoc />
         public InfractionReportService(ApplicationDbContext context, IMapper mapper,
-            ILogger<InfractionReportService> logger, ISieveProcessor sieveProcessor) : base(context, mapper)
+            ILogger<InfractionReportService> logger, ISieveProcessor sieveProcessor) : base(context, mapper, sieveProcessor)
         {
             _logger = logger;
-            _sieveProcessor = sieveProcessor;
         }
 
         public async Task<Result<InfractionReportDto>> GetAsync(Guid id, CancellationToken cancellationToken = default)
@@ -39,15 +37,12 @@ namespace RoadMD.Application.Services.InfractionReports
                 ? new Result<InfractionReportDto>(new NotFoundException(nameof(InfractionReport), id))
                 : new Result<InfractionReportDto>(infractionReportDto);
         }
+
         public async Task<PaginatedListDto<InfractionReportDto>> GetListAsync(SieveModel queryModel, CancellationToken cancellationToken = default)
         {
-            var queryable = Context.InfractionReports.AsNoTracking();
-
-            queryable = _sieveProcessor.Apply(queryModel, queryable);
-
-            return await queryable.ProjectToType<InfractionReportDto>().ToPaginatedListAsync(1, 10, cancellationToken);
-
+            return await GetPaginatedListAsync<InfractionReport, InfractionReportDto>(Context.InfractionReports.AsNoTracking(), queryModel, cancellationToken);
         }
+
         public async Task<Result<InfractionReportDto>> CreateAsync(CreateInfractionReportDto input, CancellationToken cancellationToken = default)
         {
             var infractionReport = new InfractionReport
@@ -74,6 +69,7 @@ namespace RoadMD.Application.Services.InfractionReports
 
             return new Result<InfractionReportDto>(infractionReportDto);
         }
+
         public async Task<Result<InfractionReportDto>> UpdateAsync(UpdateInfractionReportDto input, CancellationToken cancellationToken = default)
         {
             var infractionReport = await Context.InfractionReports
@@ -103,6 +99,7 @@ namespace RoadMD.Application.Services.InfractionReports
 
             return new Result<InfractionReportDto>(infractionReportDto);
         }
+
         public async Task<Result<Unit>> DeleteAsync(Guid id, CancellationToken cancellationToken = default)
         {
             var infractionReport = await Context.InfractionReports

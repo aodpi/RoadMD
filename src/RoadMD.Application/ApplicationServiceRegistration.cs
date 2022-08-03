@@ -34,7 +34,7 @@ namespace RoadMD.Application
         {
             services.AddScoped<ISieveCustomSortMethods, SieveCustomSortMethods>();
             services.AddScoped<ISieveCustomFilterMethods, SieveCustomFilterMethods>();
-            services.AddScoped<SieveProcessor>();
+            services.AddScoped<ISieveProcessor, SieveProcessor>();
 
             return services;
         }

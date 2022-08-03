@@ -4,6 +4,8 @@ using Mapster;
 using MapsterMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using RoadMD.Application.Common.Extensions;
+using RoadMD.Application.Dto.Common;
 using RoadMD.Application.Dto.Infractions;
 using RoadMD.Application.Dto.Infractions.Create;
 using RoadMD.Application.Dto.Infractions.List;
@@ -12,6 +14,8 @@ using RoadMD.Application.Exceptions;
 using RoadMD.Domain.Entities;
 using RoadMD.EntityFrameworkCore;
 using RoadMD.Module.PhotoStorage.Abstractions;
+using Sieve.Models;
+using Sieve.Services;
 
 namespace RoadMD.Application.Services.Infractions
 {
@@ -19,13 +23,15 @@ namespace RoadMD.Application.Services.Infractions
     {
         private readonly ILogger<InfractionService> _logger;
         private readonly IPhotoStorageService _photoStorage;
+        private readonly ISieveProcessor _sieveProcessor;
 
         public InfractionService(ApplicationDbContext context, IMapper mapper, ILogger<InfractionService> logger,
-            IPhotoStorageService photoStorage) :
+            IPhotoStorageService photoStorage, ISieveProcessor sieveProcessor) :
             base(context, mapper)
         {
             _logger = logger;
             _photoStorage = photoStorage;
+            _sieveProcessor = sieveProcessor;
         }
 
         public async Task<Result<InfractionDto>> GetAsync(Guid id, CancellationToken cancellationToken = default)
@@ -40,12 +46,18 @@ namespace RoadMD.Application.Services.Infractions
                 : new Result<InfractionDto>(infractionDto);
         }
 
-        public async Task<IEnumerable<InfractionListDto>> GetListAsync(CancellationToken cancellationToken = default)
+        public async Task<PaginatedListDto<InfractionListDto>> GetListAsync(SieveModel sieveModel,
+            CancellationToken cancellationToken = default)
         {
-            return await Context.Infractions
+            var infractionQueryable = Context.Infractions
                 .OrderBy(x => x.Name)
-                .ProjectToType<InfractionListDto>(Mapper.Config)
-                .ToListAsync(cancellationToken);
+                .AsNoTracking();
+
+            infractionQueryable = _sieveProcessor.Apply(sieveModel, infractionQueryable, applyPagination: false);
+
+            return await infractionQueryable
+                .ProjectToType<InfractionListDto>()
+                .ToPaginatedListAsync(sieveModel.Page, sieveModel.PageSize, cancellationToken);
         }
 
         public async Task<Result<InfractionDto>> CreateAsync(CreateInfractionDto input,
@@ -206,7 +218,7 @@ namespace RoadMD.Application.Services.Infractions
             try
             {
                 await Context.SaveChangesAsync(cancellationToken);
-                await _photoStorage.DeletePhotos(new Guid[] {photo.BlobName}, cancellationToken);
+                await _photoStorage.DeletePhotos(new Guid[] { photo.BlobName }, cancellationToken);
             }
             catch (Exception e)
             {

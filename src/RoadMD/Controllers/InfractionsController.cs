@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using RoadMD.Application.Dto.Common;
 using RoadMD.Application.Dto.Infractions;
 using RoadMD.Application.Dto.Infractions.Create;
 using RoadMD.Application.Dto.Infractions.List;
@@ -7,6 +8,7 @@ using RoadMD.Application.Dto.InfractionReports;
 using RoadMD.Application.Services.InfractionReports;
 using RoadMD.Application.Services.Infractions;
 using RoadMD.Extensions;
+using Sieve.Models;
 
 namespace RoadMD.Controllers
 {
@@ -46,13 +48,15 @@ namespace RoadMD.Controllers
         /// <summary>
         ///     List all infractions
         /// </summary>
+        /// <param name="queryParams">Query Params</param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         [HttpGet]
-        [ProducesResponseType(typeof(IEnumerable<InfractionListDto>), StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetList(CancellationToken cancellationToken = default)
+        [ProducesResponseType(typeof(PaginatedListDto<InfractionListDto>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetList([FromQuery] SieveModel queryParams,
+            CancellationToken cancellationToken = default)
         {
-            var result = await _infractionService.GetListAsync(cancellationToken);
+            var result = await _infractionService.GetListAsync(queryParams, cancellationToken);
             return Ok(result);
         }
 

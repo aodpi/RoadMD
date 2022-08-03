@@ -1,6 +1,7 @@
 ﻿using Azure.Storage.Blobs;
 using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using RoadMD.Application;
 using RoadMD.Application.Services.InfractionCategories;
 using RoadMD.Application.Services.InfractionReports;
@@ -35,16 +36,16 @@ namespace RoadMD
             services.AddSwaggerGen(f =>
             {
                 f.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, $"{nameof(RoadMD)}.xml"), true);
-                /*f.CustomSchemaIds(type =>
+                f.CustomSchemaIds(type =>
                 {
-                    var returnedValue = type.Name;
+                    var returnedValue = type.ShortDisplayName();
 
-                    if (returnedValue.EndsWith("dto", StringComparison.InvariantCultureIgnoreCase))
+                    if (returnedValue.Contains("dto", StringComparison.InvariantCultureIgnoreCase))
                         returnedValue = returnedValue.Replace("dto", string.Empty,
                             StringComparison.InvariantCultureIgnoreCase);
 
                     return returnedValue;
-                });*/
+                });
             });
 
             services.AddDbContext<ApplicationDbContext>(op =>

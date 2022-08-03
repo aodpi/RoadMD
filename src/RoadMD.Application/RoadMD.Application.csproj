@@ -19,6 +19,7 @@
     <PackageReference Include="Mapster.DependencyInjection" Version="1.0.0" />
     <PackageReference Include="Mapster.EFCore" Version="5.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="5.0.17" />
+    <PackageReference Include="Sieve" Version="2.5.5" />
   </ItemGroup>
 
   <ItemGroup>
@@ -27,6 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Common\Extensions\" />
     <Folder Include="Dto\InfractionCategories\" />
     <Folder Include="Dto\Common\" />
     <Folder Include="Dto\ReportCategories\" />
@@ -38,6 +40,7 @@
     <Folder Include="Validation\ReportCategory\" />
     <Folder Include="Validation\Infraction\" />
     <Folder Include="Validation\Common\" />
+    <Folder Include="Common\Sieve\" />
   </ItemGroup>
 
 </Project>

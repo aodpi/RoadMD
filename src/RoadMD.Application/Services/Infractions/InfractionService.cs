@@ -4,6 +4,8 @@ using Mapster;
 using MapsterMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using RoadMD.Application.Common.Extensions;
+using RoadMD.Application.Dto.Common;
 using RoadMD.Application.Dto.Infractions;
 using RoadMD.Application.Dto.Infractions.Create;
 using RoadMD.Application.Dto.Infractions.List;
@@ -12,6 +14,8 @@ using RoadMD.Application.Exceptions;
 using RoadMD.Domain.Entities;
 using RoadMD.EntityFrameworkCore;
 using RoadMD.Module.PhotoStorage.Abstractions;
+using Sieve.Models;
+using Sieve.Services;
 
 namespace RoadMD.Application.Services.Infractions
 {
@@ -19,13 +23,15 @@ namespace RoadMD.Application.Services.Infractions
     {
         private readonly ILogger<InfractionService> _logger;
         private readonly IPhotoStorageService _photoStorage;
+        private readonly ISieveProcessor _sieveProcessor;
 
         public InfractionService(ApplicationDbContext context, IMapper mapper, ILogger<InfractionService> logger,
-            IPhotoStorageService photoStorage) :
+            IPhotoStorageService photoStorage, ISieveProcessor sieveProcessor) :
             base(context, mapper)
         {
             _logger = logger;
             _photoStorage = photoStorage;
+            _sieveProcessor = sieveProcessor;
         }
 
         public async Task<Result<InfractionDto>> GetAsync(Guid id, CancellationToken cancellationToken = default)
@@ -40,15 +46,22 @@ namespace RoadMD.Application.Services.Infractions
                 : new Result<InfractionDto>(infractionDto);
         }
 
-        public async Task<IEnumerable<InfractionListDto>> GetListAsync(CancellationToken cancellationToken = default)
+        public async Task<PaginatedListDto<InfractionListDto>> GetListAsync(SieveModel sieveModel,
+            CancellationToken cancellationToken = default)
         {
-            return await Context.Infractions
+            var infractionQueryable = Context.Infractions
                 .OrderBy(x => x.Name)
-                .ProjectToType<InfractionListDto>(Mapper.Config)
-                .ToListAsync(cancellationToken);
+                .AsNoTracking();
+
+            infractionQueryable = _sieveProcessor.Apply(sieveModel, infractionQueryable, applyPagination: false);
+
+            return await infractionQueryable
+                .ProjectToType<InfractionListDto>()
+                .ToPaginatedListAsync(sieveModel.Page, sieveModel.PageSize, cancellationToken);
         }
 
-        public async Task<Result<InfractionDto>> CreateAsync(CreateInfractionDto input, CancellationToken cancellationToken = default)
+        public async Task<Result<InfractionDto>> CreateAsync(CreateInfractionDto input,
+            CancellationToken cancellationToken = default)
         {
             var vehicle = await Context.Vehicles
                 .SingleOrDefaultAsync(x => x.Number.Equals(input.Vehicle.Number), cancellationToken: cancellationToken);
@@ -61,15 +74,15 @@ namespace RoadMD.Application.Services.Infractions
                 Location = new Location
                 {
                     Longitude = input.Location.Longitude,
-                    Latitude = input.Location.Latitude,
-                },
+                    Latitude = input.Location.Latitude
+                }
             };
 
             if (vehicle is null)
             {
                 infraction.Vehicle = new Vehicle
                 {
-                    Number = input.Vehicle.Number,
+                    Number = input.Vehicle.Number
                 };
             }
             else
@@ -77,18 +90,21 @@ namespace RoadMD.Application.Services.Infractions
                 infraction.VehicleId = vehicle.Id;
             }
 
-            foreach (var photo in input.Photos)
+            if (input.Photos is not null && input.Photos.Any())
             {
-                using var stream = photo.OpenReadStream();
-
-                var (Url, BlobName) = await _photoStorage.StorePhoto(photo.FileName, stream, cancellationToken);
-
-                infraction.Photos.Add(new Photo
+                foreach (var photo in input.Photos)
                 {
-                    BlobName = BlobName,
-                    Name = photo.FileName,
-                    Url = Url,
-                });
+                    await using var stream = photo.OpenReadStream();
+
+                    var (url, blobName) = await _photoStorage.StorePhoto(photo.FileName, stream, cancellationToken);
+
+                    infraction.Photos.Add(new Photo
+                    {
+                        BlobName = blobName,
+                        Name = photo.FileName,
+                        Url = url
+                    });
+                }
             }
 
             await Context.Infractions.AddAsync(infraction, cancellationToken);
@@ -107,7 +123,8 @@ namespace RoadMD.Application.Services.Infractions
             return new Result<InfractionDto>(infractionDto);
         }
 
-        public async Task<Result<InfractionDto>> UpdateAsync(UpdateInfractionDto input, CancellationToken cancellationToken = default)
+        public async Task<Result<InfractionDto>> UpdateAsync(UpdateInfractionDto input,
+            CancellationToken cancellationToken = default)
         {
             var infraction = await Context.Infractions
                 .Include(x => x.Vehicle)
@@ -184,7 +201,8 @@ namespace RoadMD.Application.Services.Infractions
             return new Result<Unit>();
         }
 
-        public async Task<Result<Unit>> DeletePhotoAsync(Guid id, Guid photoId, CancellationToken cancellationToken = default)
+        public async Task<Result<Unit>> DeletePhotoAsync(Guid id, Guid photoId,
+            CancellationToken cancellationToken = default)
         {
             var photo = await Context.Photos
                 .Where(x => x.InfractionId.Equals(id) && x.Id.Equals(photoId))
@@ -200,7 +218,7 @@ namespace RoadMD.Application.Services.Infractions
             try
             {
                 await Context.SaveChangesAsync(cancellationToken);
-                await _photoStorage.DeletePhotos(new Guid[] {photo.BlobName}, cancellationToken);
+                await _photoStorage.DeletePhotos(new Guid[] { photo.BlobName }, cancellationToken);
             }
             catch (Exception e)
             {

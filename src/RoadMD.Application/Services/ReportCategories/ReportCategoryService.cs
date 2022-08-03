@@ -9,6 +9,7 @@ using RoadMD.Application.Dto.ReportCategories;
 using RoadMD.Application.Exceptions;
 using RoadMD.Domain.Entities;
 using RoadMD.EntityFrameworkCore;
+using Sieve.Services;
 
 namespace RoadMD.Application.Services.ReportCategories
 {
@@ -17,7 +18,7 @@ namespace RoadMD.Application.Services.ReportCategories
         private readonly ILogger<ReportCategoryService> _logger;
 
         public ReportCategoryService(ApplicationDbContext context, IMapper mapper,
-            ILogger<ReportCategoryService> logger) : base(context, mapper)
+            ILogger<ReportCategoryService> logger, ISieveProcessor sieveProcessor) : base(context, mapper, sieveProcessor)
         {
             _logger = logger;
         }
@@ -44,8 +45,7 @@ namespace RoadMD.Application.Services.ReportCategories
                 .ToListAsync(cancellationToken);
         }
 
-        public async Task<Result<ReportCategoryDto>> CreateAsync(CreateReportCategoryDto input,
-            CancellationToken cancellationToken = default)
+        public async Task<Result<ReportCategoryDto>> CreateAsync(CreateReportCategoryDto input, CancellationToken cancellationToken = default)
         {
             var entity = new ReportCategory
             {
@@ -70,8 +70,7 @@ namespace RoadMD.Application.Services.ReportCategories
             return new Result<ReportCategoryDto>(dto);
         }
 
-        public async Task<Result<ReportCategoryDto>> UpdateAsync(UpdateReportCategoryDto input,
-            CancellationToken cancellationToken = default)
+        public async Task<Result<ReportCategoryDto>> UpdateAsync(UpdateReportCategoryDto input, CancellationToken cancellationToken = default)
         {
             var reportCategory = await Context.ReportCategories
                 .SingleOrDefaultAsync(x => x.Id.Equals(input.Id), cancellationToken);

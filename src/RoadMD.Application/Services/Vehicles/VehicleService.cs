@@ -18,14 +18,10 @@ namespace RoadMD.Application.Services.Vehicles
     public class VehicleService : ServiceBase, IVehicleService
     {
         private readonly ILogger<VehicleService> _logger;
-        private readonly ISieveProcessor _sieveProcessor;
 
-        public VehicleService(ApplicationDbContext context, IMapper mapper, ILogger<VehicleService> logger,
-            ISieveProcessor sieveProcessor) : base(
-            context, mapper)
+        public VehicleService(ApplicationDbContext context, IMapper mapper, ILogger<VehicleService> logger, ISieveProcessor sieveProcessor) : base(context, mapper, sieveProcessor)
         {
             _logger = logger;
-            _sieveProcessor = sieveProcessor;
         }
 
         public async Task<Result<VehicleDto>> GetAsync(Guid id, CancellationToken cancellationToken = default)
@@ -41,16 +37,10 @@ namespace RoadMD.Application.Services.Vehicles
                 : new Result<VehicleDto>(entity);
         }
 
-        public async Task<PaginatedListDto<VehicleDto>> GetListAsync(SieveModel queryModel,
-            CancellationToken cancellationToken = default)
+        public async Task<PaginatedListDto<VehicleDto>> GetListAsync(SieveModel queryModel, CancellationToken cancellationToken = default)
         {
-            var vehiclesQueryable = Context.Vehicles
-                .AsNoTracking();
-
-            vehiclesQueryable = _sieveProcessor.Apply(queryModel, vehiclesQueryable, applyPagination: false);
-
-            return await vehiclesQueryable.ProjectToType<VehicleDto>()
-                .ToPaginatedListAsync(queryModel.Page, queryModel.PageSize, cancellationToken);
+            return await GetPaginatedListAsync<Vehicle, VehicleDto>(Context.Vehicles.AsNoTracking(), queryModel,
+                cancellationToken);
         }
 
         public async Task<Result<VehicleDto>> CreateAsync(CreateVehicleDto input,

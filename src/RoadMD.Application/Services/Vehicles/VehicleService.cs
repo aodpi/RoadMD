@@ -4,21 +4,28 @@ using Mapster;
 using MapsterMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using RoadMD.Application.Common.Extensions;
+using RoadMD.Application.Dto.Common;
 using RoadMD.Application.Dto.Vehicles;
 using RoadMD.Application.Exceptions;
 using RoadMD.Domain.Entities;
 using RoadMD.EntityFrameworkCore;
+using Sieve.Models;
+using Sieve.Services;
 
 namespace RoadMD.Application.Services.Vehicles
 {
     public class VehicleService : ServiceBase, IVehicleService
     {
         private readonly ILogger<VehicleService> _logger;
+        private readonly ISieveProcessor _sieveProcessor;
 
-        public VehicleService(ApplicationDbContext context, IMapper mapper, ILogger<VehicleService> logger) : base(
+        public VehicleService(ApplicationDbContext context, IMapper mapper, ILogger<VehicleService> logger,
+            ISieveProcessor sieveProcessor) : base(
             context, mapper)
         {
             _logger = logger;
+            _sieveProcessor = sieveProcessor;
         }
 
         public async Task<Result<VehicleDto>> GetAsync(Guid id, CancellationToken cancellationToken = default)
@@ -34,12 +41,16 @@ namespace RoadMD.Application.Services.Vehicles
                 : new Result<VehicleDto>(entity);
         }
 
-        public async Task<IEnumerable<VehicleDto>> GetListAsync(CancellationToken cancellationToken = default)
+        public async Task<PaginatedListDto<VehicleDto>> GetListAsync(SieveModel queryModel,
+            CancellationToken cancellationToken = default)
         {
-            var items = await Context.Vehicles.ProjectToType<VehicleDto>()
-                .ToListAsync(cancellationToken);
+            var vehiclesQueryable = Context.Vehicles
+                .AsNoTracking();
 
-            return items;
+            vehiclesQueryable = _sieveProcessor.Apply(queryModel, vehiclesQueryable, applyPagination: false);
+
+            return await vehiclesQueryable.ProjectToType<VehicleDto>()
+                .ToPaginatedListAsync(queryModel.Page, queryModel.PageSize, cancellationToken);
         }
 
         public async Task<Result<VehicleDto>> CreateAsync(CreateVehicleDto input,

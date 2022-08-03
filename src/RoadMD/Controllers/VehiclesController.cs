@@ -2,7 +2,9 @@
 using RoadMD.Application.Dto.Vehicles;
 using RoadMD.Application.Services.Vehicles;
 using System.ComponentModel.DataAnnotations;
+using RoadMD.Application.Dto.Common;
 using RoadMD.Extensions;
+using Sieve.Models;
 
 namespace RoadMD.Controllers
 {
@@ -39,16 +41,16 @@ namespace RoadMD.Controllers
         /// <summary>
         ///     List all reported vehicles
         /// </summary>
-        /// <param name="letterCode">Filter by letter code</param>
+        /// <param name="queryParams">Query Params</param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         [HttpGet]
-        [ProducesResponseType(typeof(IEnumerable<VehicleDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(PaginatedListDto<VehicleDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IEnumerable<VehicleDto>> GetVehicles([Required] string letterCode,
+        public async Task<IActionResult> GetVehicles([FromQuery] SieveModel queryParams,
             CancellationToken cancellationToken = default)
         {
-            return await _vehicleService.GetListAsync(cancellationToken);
+            return Ok(await _vehicleService.GetListAsync(queryParams, cancellationToken));
         }
 
         /// <summary>

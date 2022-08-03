@@ -35,7 +35,7 @@ namespace RoadMD
             services.AddSwaggerGen(f =>
             {
                 f.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, $"{nameof(RoadMD)}.xml"), true);
-                f.CustomSchemaIds(type =>
+                /*f.CustomSchemaIds(type =>
                 {
                     var returnedValue = type.Name;
 
@@ -44,7 +44,7 @@ namespace RoadMD
                             StringComparison.InvariantCultureIgnoreCase);
 
                     return returnedValue;
-                });
+                });*/
             });
 
             services.AddDbContext<ApplicationDbContext>(op =>

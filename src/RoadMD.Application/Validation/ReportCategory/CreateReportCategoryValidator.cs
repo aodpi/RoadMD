@@ -14,8 +14,15 @@ namespace RoadMD.Application.Validation.ReportCategory
             _context = context;
 
             RuleFor(x => x.Name)
-                .MaximumLength(150)
-                .Must(HaveUniqueName).WithMessage("A report category with the same {PropertyName} already exists.");
+                .NotEmpty()
+                .MaximumLength(150);
+
+            When(dto => !string.IsNullOrEmpty(dto.Name), () =>
+            {
+                RuleFor(x => x.Name)
+                    .Must(HaveUniqueName)
+                    .WithMessage("A report category with the same {PropertyName} already exists.");
+            });
         }
 
         private bool HaveUniqueName(string name)

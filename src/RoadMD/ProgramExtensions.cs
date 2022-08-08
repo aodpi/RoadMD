@@ -24,12 +24,13 @@ namespace RoadMD
         {
             services.AddRoadMdValidators();
 
-            services.AddControllers()
-                .AddFluentValidation(cfg =>
+            services.AddControllers();
+
+            services.AddFluentValidationAutoValidation(validationConfiguration =>
                 {
-                    cfg.AutomaticValidationEnabled = true;
-                    cfg.DisableDataAnnotationsValidation = true;
-                });
+                    validationConfiguration.DisableDataAnnotationsValidation = true;
+                })
+                .AddFluentValidationClientsideAdapters();
 
             services.AddEndpointsApiExplorer();
 

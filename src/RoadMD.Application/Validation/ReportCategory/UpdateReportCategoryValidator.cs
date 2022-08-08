@@ -17,10 +17,15 @@ namespace RoadMD.Application.Validation.ReportCategory
                 .NotEmpty();
 
             RuleFor(x => x.Name)
-                .MaximumLength(150)
-                .Must((dto, name) => HaveUniqueName(dto.Id, name))
-                .WithMessage("A report category with the same {PropertyName} already exists.")
-                .When(c => !string.IsNullOrEmpty(c.Name));
+                .NotEmpty()
+                .MaximumLength(150);
+
+            When(dto => !string.IsNullOrEmpty(dto.Name), () =>
+            {
+                RuleFor(x => x.Name)
+                    .Must((dto, name) => HaveUniqueName(dto.Id, name))
+                    .WithMessage("A report category with the same {PropertyName} already exists.");
+            });
         }
 
         private bool HaveUniqueName(Guid idToExclude, string name)

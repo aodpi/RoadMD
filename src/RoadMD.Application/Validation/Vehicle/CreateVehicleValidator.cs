@@ -12,14 +12,16 @@ namespace RoadMD.Application.Validation.Vehicle
         {
             _context = context;
 
-
             RuleFor(f => f.Number)
                 .NotEmpty()
                 .WithMessage("Please provide number")
-                .MaximumLength(10)
-                .When(f => !string.IsNullOrEmpty(f.Number))
-                .Must(HaveUniqueNumber)
-                .WithMessage("A vehicle with the same number already exists");
+                .MaximumLength(10);
+
+            When(dto => !string.IsNullOrEmpty(dto.Number), () =>
+            {
+                RuleFor(x => x.Number).Must(HaveUniqueNumber)
+                    .WithMessage("A vehicle with the same number already exists");
+            });
         }
 
         private bool HaveUniqueNumber(CreateVehicleDto dto, string number)

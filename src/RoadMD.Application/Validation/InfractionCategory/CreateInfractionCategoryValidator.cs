@@ -15,9 +15,14 @@ namespace RoadMD.Application.Validation.InfractionCategory
 
             RuleFor(x => x.Name)
                 .NotEmpty()
-                .MaximumLength(150)
-                .Must(HaveUniqueName).WithMessage("An infraction category with the same {PropertyName} already exists.")
-                .When(c => !string.IsNullOrEmpty(c.Name));
+                .MaximumLength(150);
+
+            When(dto => !string.IsNullOrEmpty(dto.Name), () =>
+            {
+                RuleFor(x => x.Name)
+                    .Must(HaveUniqueName)
+                    .WithMessage("An infraction category with the same {PropertyName} already exists.");
+            });
         }
 
         private bool HaveUniqueName(string name)

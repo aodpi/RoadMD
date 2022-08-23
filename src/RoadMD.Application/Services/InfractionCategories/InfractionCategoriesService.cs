@@ -122,7 +122,7 @@ namespace RoadMD.Application.Services.InfractionCategories
                 return new Result<Unit>(e);
             }
 
-            return new Result<Unit>();
+            return new Result<Unit>(Unit.Default);
         }
     }
 }

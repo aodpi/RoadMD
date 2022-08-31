@@ -11,7 +11,7 @@ namespace RoadMD.Application.UnitTests.Services
 {
     public class InfractionCategoriesServiceTests : TestFixture
     {
-        private readonly InfractionCategoriesService _infractionCategoriesService;
+        private readonly IInfractionCategoriesService _infractionCategoriesService;
         private readonly Faker _faker;
 
         public InfractionCategoriesServiceTests()

@@ -4,7 +4,6 @@ using Mapster;
 using MapsterMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using RoadMD.Application.Common.Extensions;
 using RoadMD.Application.Dto.Common;
 using RoadMD.Application.Dto.InfractionReports;
 using RoadMD.Application.Exceptions;
@@ -21,7 +20,8 @@ namespace RoadMD.Application.Services.InfractionReports
 
         /// <inheritdoc />
         public InfractionReportService(ApplicationDbContext context, IMapper mapper,
-            ILogger<InfractionReportService> logger, ISieveProcessor sieveProcessor) : base(context, mapper, sieveProcessor)
+            ILogger<InfractionReportService> logger, ISieveProcessor sieveProcessor) : base(context, mapper,
+            sieveProcessor)
         {
             _logger = logger;
         }
@@ -38,12 +38,15 @@ namespace RoadMD.Application.Services.InfractionReports
                 : new Result<InfractionReportDto>(infractionReportDto);
         }
 
-        public async Task<PaginatedListDto<InfractionReportDto>> GetListAsync(SieveModel queryModel, CancellationToken cancellationToken = default)
+        public async Task<PaginatedListDto<InfractionReportDto>> GetListAsync(SieveModel queryModel,
+            CancellationToken cancellationToken = default)
         {
-            return await GetPaginatedListAsync<InfractionReport, InfractionReportDto>(Context.InfractionReports.AsNoTracking(), queryModel, cancellationToken);
+            return await GetPaginatedListAsync<InfractionReport, InfractionReportDto>(
+                Context.InfractionReports.AsNoTracking(), queryModel, cancellationToken);
         }
 
-        public async Task<Result<InfractionReportDto>> CreateAsync(CreateInfractionReportDto input, CancellationToken cancellationToken = default)
+        public async Task<Result<InfractionReportDto>> CreateAsync(CreateInfractionReportDto input,
+            CancellationToken cancellationToken = default)
         {
             var infractionReport = new InfractionReport
             {
@@ -70,7 +73,8 @@ namespace RoadMD.Application.Services.InfractionReports
             return new Result<InfractionReportDto>(infractionReportDto);
         }
 
-        public async Task<Result<InfractionReportDto>> UpdateAsync(UpdateInfractionReportDto input, CancellationToken cancellationToken = default)
+        public async Task<Result<InfractionReportDto>> UpdateAsync(UpdateInfractionReportDto input,
+            CancellationToken cancellationToken = default)
         {
             var infractionReport = await Context.InfractionReports
                 .Where(x => x.Id.Equals(input.Id))
@@ -121,7 +125,7 @@ namespace RoadMD.Application.Services.InfractionReports
                 return new Result<Unit>(e);
             }
 
-            return new Result<Unit>();
+            return new Result<Unit>(Unit.Default);
         }
     }
 }

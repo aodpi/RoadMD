@@ -17,11 +17,13 @@ namespace RoadMD.Application.UnitTests
             Context = ApplicationDbContextFactory.Create();
             SieveProcessor = SieveProcessorFactory.Create();
             Mapper = MapperFactory.Create();
+            Faker = FakerFactory.Create();
         }
 
         public ApplicationDbContext Context { get; }
         public ISieveProcessor SieveProcessor { get; }
         public IMapper Mapper { get; }
+        public Faker Faker { get; }
 
         // Test Cleanup
         public void Dispose()

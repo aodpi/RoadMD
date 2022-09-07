@@ -85,6 +85,7 @@ namespace RoadMD.Application.Services.InfractionReports
 
             infractionReport.ReportCategoryId = input.ReportCategoryId;
             infractionReport.Description = input.Description;
+            infractionReport.InfractionId = input.InfractionId;
 
             Context.InfractionReports.Update(infractionReport);
 

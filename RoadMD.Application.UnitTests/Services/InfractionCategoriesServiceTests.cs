@@ -12,11 +12,10 @@ namespace RoadMD.Application.UnitTests.Services
     public class InfractionCategoriesServiceTests : TestFixture
     {
         private readonly IInfractionCategoriesService _infractionCategoriesService;
-        private readonly Faker _faker;
+
 
         public InfractionCategoriesServiceTests()
         {
-            _faker = new Faker();
             var mock = new Mock<ILogger<InfractionCategoriesService>>();
             _infractionCategoriesService =
                 new InfractionCategoriesService(Context, Mapper, mock.Object, SieveProcessor);
@@ -26,7 +25,7 @@ namespace RoadMD.Application.UnitTests.Services
         public async Task GetInfractionCategoryAsync()
         {
             var infractionCategories =
-                InfractionCategoryMock.GenerateRandomInfractionCategories(_faker.Random.Number(2, 10));
+                InfractionCategoryMock.GenerateRandomInfractionCategories(Faker.Random.Number(2, 10));
 
             await Context.InfractionCategories.AddRangeAsync(infractionCategories);
             await Context.SaveChangesAsync();
@@ -47,7 +46,7 @@ namespace RoadMD.Application.UnitTests.Services
         public async Task GetInfractionCategoriesSelectListAsync()
         {
             var infractionCategories =
-                InfractionCategoryMock.GenerateRandomInfractionCategories(_faker.Random.Number(2, 10));
+                InfractionCategoryMock.GenerateRandomInfractionCategories(Faker.Random.Number(2, 10));
 
             await Context.InfractionCategories.AddRangeAsync(infractionCategories);
             await Context.SaveChangesAsync();
@@ -84,7 +83,7 @@ namespace RoadMD.Application.UnitTests.Services
         public async Task UpdateInfractionCategoryAsync()
         {
             var infractionCategories =
-                InfractionCategoryMock.GenerateRandomInfractionCategories(_faker.Random.Number(2, 10));
+                InfractionCategoryMock.GenerateRandomInfractionCategories(Faker.Random.Number(2, 10));
 
             await Context.InfractionCategories.AddRangeAsync(infractionCategories);
             await Context.SaveChangesAsync();
@@ -111,7 +110,7 @@ namespace RoadMD.Application.UnitTests.Services
         public async Task DeleteInfractionCategoryAsync()
         {
             var infractionCategories =
-                InfractionCategoryMock.GenerateRandomInfractionCategories(_faker.Random.Number(2, 10));
+                InfractionCategoryMock.GenerateRandomInfractionCategories(Faker.Random.Number(2, 10));
 
             await Context.InfractionCategories.AddRangeAsync(infractionCategories);
             await Context.SaveChangesAsync();

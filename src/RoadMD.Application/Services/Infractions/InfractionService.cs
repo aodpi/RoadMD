@@ -4,7 +4,6 @@ using Mapster;
 using MapsterMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using RoadMD.Application.Common.Extensions;
 using RoadMD.Application.Dto.Common;
 using RoadMD.Application.Dto.Infractions;
 using RoadMD.Application.Dto.Infractions.Create;
@@ -51,7 +50,8 @@ namespace RoadMD.Application.Services.Infractions
                 .OrderBy(x => x.Name)
                 .AsNoTracking();
 
-           return await GetPaginatedListAsync<Infraction, InfractionListDto>(infractionQueryable, queryParams, cancellationToken);
+            return await GetPaginatedListAsync<Infraction, InfractionListDto>(infractionQueryable, queryParams,
+                cancellationToken);
         }
 
         public async Task<Result<InfractionDto>> CreateAsync(CreateInfractionDto input,

@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Moq;
 using RoadMD.Application.Dto.Vehicles;
-using RoadMD.Application.Services.Infractions;
 using RoadMD.Application.Services.Vehicles;
 using RoadMD.Application.UnitTests.Common.Mocks;
 using Sieve.Models;

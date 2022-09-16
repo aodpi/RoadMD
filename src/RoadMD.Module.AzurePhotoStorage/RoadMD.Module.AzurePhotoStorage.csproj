@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\RoadMD.Module.PhotoStorage.Abstractions\RoadMD.Module.PhotoStorage.Abstractions.csproj" />
+    <ProjectReference Include="..\RoadMD.Module.PhotoStorage.Abstractions\RoadMD.Module.PhotoStorage.Abstractions.csproj" />
   </ItemGroup>
 
 </Project>

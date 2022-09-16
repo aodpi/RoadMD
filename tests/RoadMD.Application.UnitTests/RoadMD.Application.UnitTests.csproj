@@ -26,12 +26,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\RoadMD.Application\RoadMD.Application.csproj" />
+    <Folder Include="Common\Mocks\" />
+    <Folder Include="Services\" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Common\Mocks\" />
-    <Folder Include="Services\" />
+    <ProjectReference Include="..\..\src\RoadMD.Application\RoadMD.Application.csproj" />
   </ItemGroup>
 
 </Project>

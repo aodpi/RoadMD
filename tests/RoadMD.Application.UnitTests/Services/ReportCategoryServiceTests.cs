@@ -5,7 +5,6 @@ using Moq;
 using RoadMD.Application.Dto.ReportCategories;
 using RoadMD.Application.Services.ReportCategories;
 using RoadMD.Application.UnitTests.Common.Mocks;
-using Sieve.Models;
 
 namespace RoadMD.Application.UnitTests.Services
 {

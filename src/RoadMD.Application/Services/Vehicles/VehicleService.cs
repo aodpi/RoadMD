@@ -4,7 +4,6 @@ using Mapster;
 using MapsterMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using RoadMD.Application.Common.Extensions;
 using RoadMD.Application.Dto.Common;
 using RoadMD.Application.Dto.Vehicles;
 using RoadMD.Application.Exceptions;
@@ -19,7 +18,8 @@ namespace RoadMD.Application.Services.Vehicles
     {
         private readonly ILogger<VehicleService> _logger;
 
-        public VehicleService(ApplicationDbContext context, IMapper mapper, ILogger<VehicleService> logger, ISieveProcessor sieveProcessor) : base(context, mapper, sieveProcessor)
+        public VehicleService(ApplicationDbContext context, IMapper mapper, ILogger<VehicleService> logger,
+            ISieveProcessor sieveProcessor) : base(context, mapper, sieveProcessor)
         {
             _logger = logger;
         }
@@ -43,8 +43,7 @@ namespace RoadMD.Application.Services.Vehicles
                 cancellationToken);
         }
 
-        public async Task<Result<VehicleDto>> CreateAsync(CreateVehicleDto input,
-            CancellationToken cancellationToken = default)
+        public async Task<Result<VehicleDto>> CreateAsync(CreateVehicleDto input, CancellationToken cancellationToken = default)
         {
             var vehicle = new Vehicle
             {
@@ -69,8 +68,7 @@ namespace RoadMD.Application.Services.Vehicles
             return new Result<VehicleDto>(dto);
         }
 
-        public async Task<Result<VehicleDto>> UpdateAsync(UpdateVehicleDto input,
-            CancellationToken cancellationToken = default)
+        public async Task<Result<VehicleDto>> UpdateAsync(UpdateVehicleDto input, CancellationToken cancellationToken = default)
         {
             var entity = await Context.Vehicles
                 .SingleOrDefaultAsync(x => x.Id.Equals(input.Id), cancellationToken);
@@ -118,7 +116,7 @@ namespace RoadMD.Application.Services.Vehicles
                 return new Result<Unit>(e);
             }
 
-            return new Result<Unit>();
+            return new Result<Unit>(Unit.Default);
         }
     }
 }

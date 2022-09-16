@@ -4,7 +4,6 @@ using Mapster;
 using MapsterMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using RoadMD.Application.Common.Extensions;
 using RoadMD.Application.Dto.Common;
 using RoadMD.Application.Dto.Infractions;
 using RoadMD.Application.Dto.Infractions.Create;
@@ -36,7 +35,7 @@ namespace RoadMD.Application.Services.Infractions
         {
             var infractionDto = await Context.Infractions
                 .Where(x => x.Id.Equals(id))
-                .ProjectToType<InfractionDto>()
+                .ProjectToType<InfractionDto>(Mapper.Config)
                 .SingleOrDefaultAsync(cancellationToken);
 
             return infractionDto is null
@@ -44,18 +43,17 @@ namespace RoadMD.Application.Services.Infractions
                 : new Result<InfractionDto>(infractionDto);
         }
 
-        public async Task<PaginatedListDto<InfractionListDto>> GetListAsync(SieveModel queryParams,
-            CancellationToken cancellationToken = default)
+        public async Task<PaginatedListDto<InfractionListDto>> GetListAsync(SieveModel queryParams, CancellationToken cancellationToken = default)
         {
             var infractionQueryable = Context.Infractions
                 .OrderBy(x => x.Name)
                 .AsNoTracking();
 
-           return await GetPaginatedListAsync<Infraction, InfractionListDto>(infractionQueryable, queryParams, cancellationToken);
+            return await GetPaginatedListAsync<Infraction, InfractionListDto>(infractionQueryable, queryParams,
+                cancellationToken);
         }
 
-        public async Task<Result<InfractionDto>> CreateAsync(CreateInfractionDto input,
-            CancellationToken cancellationToken = default)
+        public async Task<Result<InfractionDto>> CreateAsync(CreateInfractionDto input, CancellationToken cancellationToken = default)
         {
             var vehicle = await Context.Vehicles
                 .SingleOrDefaultAsync(x => x.Number.Equals(input.Vehicle.Number), cancellationToken: cancellationToken);
@@ -117,8 +115,7 @@ namespace RoadMD.Application.Services.Infractions
             return new Result<InfractionDto>(infractionDto);
         }
 
-        public async Task<Result<InfractionDto>> UpdateAsync(UpdateInfractionDto input,
-            CancellationToken cancellationToken = default)
+        public async Task<Result<InfractionDto>> UpdateAsync(UpdateInfractionDto input, CancellationToken cancellationToken = default)
         {
             var infraction = await Context.Infractions
                 .Include(x => x.Vehicle)
@@ -180,9 +177,12 @@ namespace RoadMD.Application.Services.Infractions
 
             try
             {
-                var blobNames = infraction.Photos.Select(f => f.BlobName);
+                if (infraction.Photos.Any())
+                {
+                    var blobNames = infraction.Photos.Select(f => f.BlobName);
 
-                await _photoStorage.DeletePhotos(blobNames, cancellationToken);
+                    await _photoStorage.DeletePhotos(blobNames, cancellationToken);
+                }
 
                 await Context.SaveChangesAsync(cancellationToken);
             }
@@ -192,11 +192,10 @@ namespace RoadMD.Application.Services.Infractions
                 return new Result<Unit>(e);
             }
 
-            return new Result<Unit>();
+            return new Result<Unit>(Unit.Default);
         }
 
-        public async Task<Result<Unit>> DeletePhotoAsync(Guid id, Guid photoId,
-            CancellationToken cancellationToken = default)
+        public async Task<Result<Unit>> DeletePhotoAsync(Guid id, Guid photoId, CancellationToken cancellationToken = default)
         {
             var photo = await Context.Photos
                 .Where(x => x.InfractionId.Equals(id) && x.Id.Equals(photoId))

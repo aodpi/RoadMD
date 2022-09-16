@@ -18,9 +18,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoadMD.Application", "src\R
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoadMD.EntityFrameworkCore", "src\RoadMD.EntityFrameworkCore\RoadMD.EntityFrameworkCore.csproj", "{A3202D1F-25A0-4032-A934-7220E721EB15}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoadMD.Module.PhotoStorage.Abstractions", "src\RoadMD.Module.PhotoStorage.Abstractions\RoadMD.Module.PhotoStorage.Abstractions.csproj", "{8328EA39-F135-4532-8595-743C63BBE76A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoadMD.Module.PhotoStorage.Abstractions", "src\RoadMD.Module.PhotoStorage.Abstractions\RoadMD.Module.PhotoStorage.Abstractions.csproj", "{8328EA39-F135-4532-8595-743C63BBE76A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoadMD.Module.AzurePhotoStorage", "RoadMD.Module.AzurePhotoStorage\RoadMD.Module.AzurePhotoStorage.csproj", "{379B5040-BD29-4783-81F2-F432A730E419}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{884A3C6B-DC55-427F-ADB1-7C2D953A5FB3}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoadMD.Module.AzurePhotoStorage", "src\RoadMD.Module.AzurePhotoStorage\RoadMD.Module.AzurePhotoStorage.csproj", "{00A3DC21-E158-415C-AF68-4AFF3A442ACD}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoadMD.Application.UnitTests", "tests\RoadMD.Application.UnitTests\RoadMD.Application.UnitTests.csproj", "{B08C99F3-E90A-4B7C-9D4F-8C52EE861894}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -48,10 +52,14 @@ Global
 		{8328EA39-F135-4532-8595-743C63BBE76A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8328EA39-F135-4532-8595-743C63BBE76A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8328EA39-F135-4532-8595-743C63BBE76A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{379B5040-BD29-4783-81F2-F432A730E419}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{379B5040-BD29-4783-81F2-F432A730E419}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{379B5040-BD29-4783-81F2-F432A730E419}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{379B5040-BD29-4783-81F2-F432A730E419}.Release|Any CPU.Build.0 = Release|Any CPU
+		{00A3DC21-E158-415C-AF68-4AFF3A442ACD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{00A3DC21-E158-415C-AF68-4AFF3A442ACD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{00A3DC21-E158-415C-AF68-4AFF3A442ACD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{00A3DC21-E158-415C-AF68-4AFF3A442ACD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B08C99F3-E90A-4B7C-9D4F-8C52EE861894}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B08C99F3-E90A-4B7C-9D4F-8C52EE861894}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B08C99F3-E90A-4B7C-9D4F-8C52EE861894}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B08C99F3-E90A-4B7C-9D4F-8C52EE861894}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -62,7 +70,8 @@ Global
 		{4BDEA49F-45CB-48A4-B760-1F7990A78A48} = {70AE2780-DD5D-4AB5-ADF8-ACDD9E1ED95E}
 		{A3202D1F-25A0-4032-A934-7220E721EB15} = {70AE2780-DD5D-4AB5-ADF8-ACDD9E1ED95E}
 		{8328EA39-F135-4532-8595-743C63BBE76A} = {70AE2780-DD5D-4AB5-ADF8-ACDD9E1ED95E}
-		{379B5040-BD29-4783-81F2-F432A730E419} = {70AE2780-DD5D-4AB5-ADF8-ACDD9E1ED95E}
+		{00A3DC21-E158-415C-AF68-4AFF3A442ACD} = {70AE2780-DD5D-4AB5-ADF8-ACDD9E1ED95E}
+		{B08C99F3-E90A-4B7C-9D4F-8C52EE861894} = {884A3C6B-DC55-427F-ADB1-7C2D953A5FB3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {EE06BDF2-7CE7-47BF-8D3E-B05E3D632DC0}

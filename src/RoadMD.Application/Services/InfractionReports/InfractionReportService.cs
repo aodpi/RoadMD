@@ -4,7 +4,6 @@ using Mapster;
 using MapsterMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using RoadMD.Application.Common.Extensions;
 using RoadMD.Application.Dto.Common;
 using RoadMD.Application.Dto.InfractionReports;
 using RoadMD.Application.Exceptions;
@@ -21,7 +20,8 @@ namespace RoadMD.Application.Services.InfractionReports
 
         /// <inheritdoc />
         public InfractionReportService(ApplicationDbContext context, IMapper mapper,
-            ILogger<InfractionReportService> logger, ISieveProcessor sieveProcessor) : base(context, mapper, sieveProcessor)
+            ILogger<InfractionReportService> logger, ISieveProcessor sieveProcessor) : base(context, mapper,
+            sieveProcessor)
         {
             _logger = logger;
         }
@@ -40,7 +40,8 @@ namespace RoadMD.Application.Services.InfractionReports
 
         public async Task<PaginatedListDto<InfractionReportDto>> GetListAsync(SieveModel queryModel, CancellationToken cancellationToken = default)
         {
-            return await GetPaginatedListAsync<InfractionReport, InfractionReportDto>(Context.InfractionReports.AsNoTracking(), queryModel, cancellationToken);
+            return await GetPaginatedListAsync<InfractionReport, InfractionReportDto>(
+                Context.InfractionReports.AsNoTracking(), queryModel, cancellationToken);
         }
 
         public async Task<Result<InfractionReportDto>> CreateAsync(CreateInfractionReportDto input, CancellationToken cancellationToken = default)
@@ -81,6 +82,7 @@ namespace RoadMD.Application.Services.InfractionReports
 
             infractionReport.ReportCategoryId = input.ReportCategoryId;
             infractionReport.Description = input.Description;
+            infractionReport.InfractionId = input.InfractionId;
 
             Context.InfractionReports.Update(infractionReport);
 
@@ -121,7 +123,7 @@ namespace RoadMD.Application.Services.InfractionReports
                 return new Result<Unit>(e);
             }
 
-            return new Result<Unit>();
+            return new Result<Unit>(Unit.Default);
         }
     }
 }

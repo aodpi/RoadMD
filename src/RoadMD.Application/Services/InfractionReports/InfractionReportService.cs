@@ -38,15 +38,13 @@ namespace RoadMD.Application.Services.InfractionReports
                 : new Result<InfractionReportDto>(infractionReportDto);
         }
 
-        public async Task<PaginatedListDto<InfractionReportDto>> GetListAsync(SieveModel queryModel,
-            CancellationToken cancellationToken = default)
+        public async Task<PaginatedListDto<InfractionReportDto>> GetListAsync(SieveModel queryModel, CancellationToken cancellationToken = default)
         {
             return await GetPaginatedListAsync<InfractionReport, InfractionReportDto>(
                 Context.InfractionReports.AsNoTracking(), queryModel, cancellationToken);
         }
 
-        public async Task<Result<InfractionReportDto>> CreateAsync(CreateInfractionReportDto input,
-            CancellationToken cancellationToken = default)
+        public async Task<Result<InfractionReportDto>> CreateAsync(CreateInfractionReportDto input, CancellationToken cancellationToken = default)
         {
             var infractionReport = new InfractionReport
             {
@@ -73,8 +71,7 @@ namespace RoadMD.Application.Services.InfractionReports
             return new Result<InfractionReportDto>(infractionReportDto);
         }
 
-        public async Task<Result<InfractionReportDto>> UpdateAsync(UpdateInfractionReportDto input,
-            CancellationToken cancellationToken = default)
+        public async Task<Result<InfractionReportDto>> UpdateAsync(UpdateInfractionReportDto input, CancellationToken cancellationToken = default)
         {
             var infractionReport = await Context.InfractionReports
                 .Where(x => x.Id.Equals(input.Id))

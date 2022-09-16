@@ -20,15 +20,8 @@ namespace RoadMD.Application.Dto.Infractions.List
                 .Map(dest => dest.Name, src => src.Name)
                 .Map(dest => dest.Description, src => src.Description)
                 .Map(dest => dest.CategoryName, src => src.Category.Name)
-                .Map(dest => dest.Location, src => new InfractionListLocationDto
-                {
-                    Longitude = src.Location.Longitude,
-                    Latitude = src.Location.Latitude
-                })
-                .Map(dest => dest.Vehicle, src => new InfractionListVehicleDto
-                {
-                    Number = src.Vehicle.Number,
-                })
+                .Map(dest => dest.Location, src => src.Location)
+                .Map(dest => dest.Vehicle, src => src.Vehicle)
                 .IgnoreNonMapped(true);
         }
     }

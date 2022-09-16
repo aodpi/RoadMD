@@ -23,8 +23,7 @@ namespace RoadMD.Application.Services.InfractionCategories
             _logger = logger;
         }
 
-        public async Task<Result<InfractionCategoryDto>> GetAsync(Guid id,
-            CancellationToken cancellationToken = default)
+        public async Task<Result<InfractionCategoryDto>> GetAsync(Guid id, CancellationToken cancellationToken = default)
         {
             var dto = await Context.InfractionCategories
                 .Where(x => x.Id.Equals(id))
@@ -44,9 +43,7 @@ namespace RoadMD.Application.Services.InfractionCategories
                 .ToListAsync(cancellationToken);
         }
 
-        public async Task<Result<InfractionCategoryDto>> CreateAsync(
-            CreateInfractionCategoryDto createInfractionCategory,
-            CancellationToken cancellationToken = default)
+        public async Task<Result<InfractionCategoryDto>> CreateAsync(CreateInfractionCategoryDto createInfractionCategory, CancellationToken cancellationToken = default)
         {
             var entity = new InfractionCategory
             {
@@ -69,8 +66,7 @@ namespace RoadMD.Application.Services.InfractionCategories
             return new Result<InfractionCategoryDto>(dto);
         }
 
-        public async Task<Result<InfractionCategoryDto>> UpdateAsync(UpdateInfractionCategoryDto input,
-            CancellationToken cancellationToken = default)
+        public async Task<Result<InfractionCategoryDto>> UpdateAsync(UpdateInfractionCategoryDto input, CancellationToken cancellationToken = default)
         {
             var entity = await Context.InfractionCategories
                 .SingleOrDefaultAsync(x =>

@@ -10,7 +10,7 @@ namespace RoadMD.Application.UnitTests.Common.Factories
         {
             var config = new TypeAdapterConfig();
 
-            config.Scan(Assembly.GetExecutingAssembly());
+            config.Scan(AppDomain.CurrentDomain.GetAssemblies());
 
             return new Mapper(config);
         }

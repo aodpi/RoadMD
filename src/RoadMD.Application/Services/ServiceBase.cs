@@ -1,5 +1,4 @@
-﻿using System.Runtime.InteropServices.ComTypes;
-using Mapster;
+﻿using Mapster;
 using MapsterMapper;
 using RoadMD.Application.Common.Extensions;
 using RoadMD.Application.Dto.Common;
@@ -38,9 +37,7 @@ namespace RoadMD.Application.Services
         protected ISieveProcessor SieveProcessor { get; init; }
 
 
-        protected async Task<PaginatedListDto<TResult>> GetPaginatedListAsync<TSource, TResult>(
-            IQueryable<TSource> source,
-            SieveModel queryParams, CancellationToken cancellationToken = default) where TResult : class
+        protected async Task<PaginatedListDto<TResult>> GetPaginatedListAsync<TSource, TResult>(IQueryable<TSource> source, SieveModel queryParams, CancellationToken cancellationToken = default) where TResult : class
         {
             source = SieveProcessor.Apply(queryParams, source, applyPagination: false);
 
@@ -48,8 +45,7 @@ namespace RoadMD.Application.Services
                 .ToPaginatedListAsync(queryParams.Page, queryParams.PageSize, cancellationToken: cancellationToken);
         }
 
-        protected IQueryable<TSource> ApplyQueryFilters<TSource>(IQueryable<TSource> source,
-            SieveModel queryParams)
+        protected IQueryable<TSource> ApplyQueryFilters<TSource>(IQueryable<TSource> source, SieveModel queryParams)
         {
             return SieveProcessor.Apply(queryParams, source, applyPagination: false);
         }

@@ -27,20 +27,9 @@ namespace RoadMD.Application.Dto.Infractions
                 .Map(dest => dest.Name, src => src.Name)
                 .Map(dest => dest.Description, src => src.Description)
                 .Map(dest => dest.CategoryId, src => src.CategoryId)
-                .Map(dest => dest.Location, src => new InfractionLocationDto
-                {
-                    Longitude = src.Location.Longitude,
-                    Latitude = src.Location.Latitude
-                })
-                .Map(dest => dest.Vehicle, src => new InfractionVehicleDto
-                {
-                    Number = src.Vehicle.Number
-                })
-                .Map(dest => dest.Photos, src => src.Photos.Select(photo => new InfractionPhotoDto
-                {
-                    Name = photo.Name,
-                    Url = photo.Url
-                }))
+                .Map(dest => dest.Location, src => src.Location)
+                .Map(dest => dest.Vehicle, src => src.Vehicle)
+                .Map(dest => dest.Photos, src => src.Photos)
                 .IgnoreNonMapped(true);
         }
     }

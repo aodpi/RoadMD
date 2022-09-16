@@ -117,7 +117,7 @@ namespace RoadMD.Application.Services.ReportCategories
                 return new Result<Unit>(e);
             }
 
-            return new Result<Unit>();
+            return new Result<Unit>(Unit.Default);
         }
     }
 }

@@ -10,7 +10,10 @@ namespace RoadMD.Application.Dto.ReportCategories
 
         public void Register(TypeAdapterConfig config)
         {
-            config.NewConfig<ReportCategory, ReportCategoryDto>();
+            config.NewConfig<ReportCategory, ReportCategoryDto>()
+                .Map(dest => dest.Id, src => src.Id)
+                .Map(dest => dest.Name, src => src.Name)
+                .IgnoreNonMapped(true);
         }
     }
 }

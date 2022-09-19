@@ -4,6 +4,7 @@ using Mapster;
 using MapsterMapper;
 using Microsoft.Extensions.DependencyInjection;
 using RoadMD.Application.Common.Sieve;
+using RoadMD.Application.Services.Feedbacks;
 using Sieve.Services;
 
 namespace RoadMD.Application
@@ -35,6 +36,7 @@ namespace RoadMD.Application
             services.AddScoped<ISieveCustomSortMethods, SieveCustomSortMethods>();
             services.AddScoped<ISieveCustomFilterMethods, SieveCustomFilterMethods>();
             services.AddScoped<ISieveProcessor, ApplicationSieveProcessor>();
+            services.AddScoped<IFeedbackService, FeedbackService>();
 
             return services;
         }

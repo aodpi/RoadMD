@@ -35,12 +35,14 @@
     <Folder Include="Services\InfractionCategories\" />
     <Folder Include="Services\ReportCategories\" />
     <Folder Include="Services\Infractions\" />
+    <Folder Include="Services\Feedbacks\" />
     <Folder Include="Validation\InfractionCategory\" />
     <Folder Include="Exceptions\" />
     <Folder Include="Validation\ReportCategory\" />
     <Folder Include="Validation\Infraction\" />
     <Folder Include="Validation\Common\" />
     <Folder Include="Common\Sieve\" />
+    <Folder Include="Validation\Feedback\" />
   </ItemGroup>
 
 </Project>

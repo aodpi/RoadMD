@@ -33,7 +33,7 @@ namespace RoadMD.Controllers
         {
             var result = await _infractionCategoriesService.GetAsync(id, cancellationToken);
 
-            return result.ToOk(x => x);
+            return result.ToOk();
         }
 
         /// <summary>

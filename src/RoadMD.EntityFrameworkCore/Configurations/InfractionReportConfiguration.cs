@@ -8,6 +8,8 @@ namespace RoadMD.EntityFrameworkCore.Configurations
         /// <inheritdoc />
         public override void Configure(EntityTypeBuilder<InfractionReport> builder)
         {
+            base.Configure(builder);
+
             builder.Property(x => x.Description)
                 .HasMaxLength(1024);
 
@@ -18,8 +20,6 @@ namespace RoadMD.EntityFrameworkCore.Configurations
             builder.HasOne(x => x.ReportCategory)
                 .WithMany(x => x.InfractionReports)
                 .HasForeignKey(x => x.ReportCategoryId);
-
-            base.Configure(builder);
         }
     }
 }

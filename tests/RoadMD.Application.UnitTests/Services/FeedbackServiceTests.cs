@@ -4,7 +4,6 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using RoadMD.Application.Dto.Feedbacks;
 using RoadMD.Application.Services.Feedbacks;
-using RoadMD.Application.Services.InfractionCategories;
 using RoadMD.Application.UnitTests.Common.Mocks;
 using Sieve.Models;
 

@@ -1,5 +1,4 @@
 ﻿using FluentValidation;
-using LanguageExt;
 using LanguageExt.Common;
 using Microsoft.AspNetCore.Mvc;
 using RoadMD.Application.Exceptions;
@@ -55,7 +54,7 @@ namespace RoadMD.Extensions
                         Detail = exception.Message
                     };
 
-                    return new ObjectResult(details) {StatusCode = StatusCodes.Status500InternalServerError};
+                    return new ObjectResult(details) { StatusCode = StatusCodes.Status500InternalServerError };
                 }
             }
         }

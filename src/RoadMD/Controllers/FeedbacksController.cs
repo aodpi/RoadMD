@@ -81,7 +81,7 @@ namespace RoadMD.Controllers
         /// <param name="input">Update feedback object</param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        [HttpPut]
+        [HttpPut("{id:guid}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

@@ -22,6 +22,17 @@ namespace RoadMD
     {
         public static void ConfigureServices(this IServiceCollection services, IConfigurationRoot configuration)
         {
+
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(builder =>
+                {
+                    builder.AllowAnyHeader();
+                    builder.AllowAnyMethod();
+                    builder.AllowAnyOrigin();
+                });
+            });
+
             services.AddRoadMdValidators();
 
             services.AddControllers();
@@ -58,7 +69,8 @@ namespace RoadMD
             services.AddRoadMdSieveProcessor();
 
             // Service factory for blob client
-            services.AddScoped(_ => new BlobServiceClient(configuration.GetConnectionString("BlobStorage")));
+            var blobConnection  = configuration.GetConnectionString("BlobStorage");
+            services.AddScoped(_ => new BlobServiceClient(blobConnection));
             services.AddScoped<IPhotoStorageService, AzurePhotoStorageService>();
 
             services.AddScoped<IVehicleService, VehicleService>();
@@ -72,6 +84,7 @@ namespace RoadMD
         {
             if (app.Environment.IsDevelopment())
             {
+                app.UseCors();
                 app.UseSwagger();
 
                 app.UseSwaggerUI(options =>

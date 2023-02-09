@@ -21,6 +21,13 @@ namespace RoadMD.Module.AzurePhotoStorage
         {
             var containerName = _configuration.GetValue(PhotoContainerKey, string.Empty);
 
+
+            if (!await _blobServiceClient.GetBlobContainerClient(containerName).ExistsAsync(cancellationToken))
+            {
+                await _blobServiceClient.CreateBlobContainerAsync(containerName, cancellationToken: cancellationToken);
+            }
+
+
             var containerClient = _blobServiceClient.GetBlobContainerClient(containerName);
 
             var extension = Path.GetExtension(filename);

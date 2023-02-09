@@ -119,5 +119,22 @@ namespace RoadMD.Application.Services.ReportCategories
 
             return new Result<Unit>(Unit.Default);
         }
+
+        public async Task<Result<Unit>> BulkDeleteAsync(Guid[] ids, CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                await Context.ReportCategories
+                    .Where(x => ids.Contains(x.Id))
+                    .ExecuteDeleteAsync(cancellationToken);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Error on delete report category \"{ReportCategoryIds}\"", string.Join(',', ids));
+                return new Result<Unit>(e);
+            }
+
+            return new Result<Unit>(Unit.Default);
+        }
     }
 }

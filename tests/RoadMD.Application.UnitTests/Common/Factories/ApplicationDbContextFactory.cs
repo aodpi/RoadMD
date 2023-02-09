@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Reflection;
+using Microsoft.EntityFrameworkCore;
 using RoadMD.EntityFrameworkCore;
 
 namespace RoadMD.Application.UnitTests.Common.Factories
@@ -8,11 +9,15 @@ namespace RoadMD.Application.UnitTests.Common.Factories
         public static ApplicationDbContext Create()
         {
             var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-                .UseInMemoryDatabase(Guid.NewGuid().ToString(), builder => builder.EnableNullChecks(false))
+
+                .UseSqlite($"DataSource=RoadMD_{Guid.NewGuid()}.db", builder =>
+                {
+                    builder.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName);
+                })
                 .Options;
 
             var context = new ApplicationDbContext(options);
-
+            context.Database.EnsureCreatedAsync();
             return context;
         }
     }

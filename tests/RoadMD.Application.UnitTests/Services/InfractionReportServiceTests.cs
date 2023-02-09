@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -113,6 +114,33 @@ namespace RoadMD.Application.UnitTests.Services
 
             var dbEntity =
                 await Context.InfractionReports.SingleOrDefaultAsync(x => x.Id.Equals(randomInfractionReport.Id));
+
+            dbEntity.Should().BeNull();
+        }
+
+        [Fact]
+        public async Task DeleteInfractionReportByInfraction()
+        {
+            var infraction = InfractionMock.GenerateRandomInfraction();
+            var infractionReports = InfractionReportMock.GenerateRandomInfractionReports(Faker.Random.Number(5, 10));
+            foreach (var report in infractionReports)
+            {
+                report.InfractionId = infraction.Id;
+            }
+
+            await Context.InfractionReports.AddRangeAsync(infractionReports);
+            await Context.SaveChangesAsync();
+
+            var randomInfractionReport = Faker.PickRandom(infractionReports);
+
+            var result = await _infractionReportService.DeleteAsync(randomInfractionReport.Id, infraction.Id);
+
+            result.IsSuccess.Should().BeTrue();
+
+
+            var dbEntity =
+                await Context.InfractionReports.SingleOrDefaultAsync(x =>
+                    x.Id.Equals(randomInfractionReport.Id) && x.InfractionId.Equals(infraction.Id));
 
             dbEntity.Should().BeNull();
         }

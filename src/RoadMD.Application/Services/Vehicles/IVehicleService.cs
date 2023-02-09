@@ -13,5 +13,6 @@ namespace RoadMD.Application.Services.Vehicles
         Task<Result<VehicleDto>> CreateAsync(CreateVehicleDto input, CancellationToken cancellationToken = default);
         Task<Result<VehicleDto>> UpdateAsync(UpdateVehicleDto input, CancellationToken cancellationToken = default);
         Task<Result<Unit>> DeleteAsync(Guid id, CancellationToken cancellationToken = default);
+        Task<Result<Unit>> BulkDeleteAsync(Guid[] ids, CancellationToken cancellationToken = default);
     }
 }

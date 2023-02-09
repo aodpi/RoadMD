@@ -120,5 +120,22 @@ namespace RoadMD.Application.Services.InfractionCategories
 
             return new Result<Unit>(Unit.Default);
         }
+
+        public async Task<Result<Unit>> BulkDeleteAsync(Guid[] ids, CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                await Context.InfractionCategories
+                    .Where(x => ids.Contains(x.Id))
+                    .ExecuteDeleteAsync(cancellationToken);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Error on delete infraction categories: {InfractionCategoriesIds}", string.Join(',', ids));
+                return new Result<Unit>(e);
+            }
+
+            return new Result<Unit>(Unit.Default);
+        }
     }
 }

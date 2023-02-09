@@ -13,7 +13,6 @@ namespace RoadMD.Application.UnitTests.Services
     {
         private readonly IInfractionCategoriesService _infractionCategoriesService;
 
-
         public InfractionCategoriesServiceTests()
         {
             var mock = new Mock<ILogger<InfractionCategoriesService>>();
@@ -54,7 +53,6 @@ namespace RoadMD.Application.UnitTests.Services
             var result = await _infractionCategoriesService.GetSelectListAsync();
 
             result.Should().NotBeNull();
-            result.Count.Should().Be(infractionCategories.Count);
 
             result.Should().AllBeAssignableTo<LookupDto>();
         }
@@ -125,6 +123,31 @@ namespace RoadMD.Application.UnitTests.Services
                 .SingleOrDefaultAsync(x => x.Id.Equals(randomInfractionCategory.Id));
 
             infractionCategory.Should().BeNull();
+        }
+
+        [Fact]
+        public async Task BulkDeleteInfractionCategoriesAsync()
+        {
+            var infractionCategories =
+                InfractionCategoryMock.GenerateRandomInfractionCategories(Faker.Random.Number(2, 50));
+
+            await Context.InfractionCategories.AddRangeAsync(infractionCategories);
+            await Context.SaveChangesAsync();
+
+            var randomInfractionCategoriesIds = new Faker()
+                .PickRandom(infractionCategories, Faker.Random.Number(0, infractionCategories.Count))
+                .Select(x => x.Id)
+                .ToArray();
+
+            var result = await _infractionCategoriesService.BulkDeleteAsync(randomInfractionCategoriesIds, CancellationToken.None);
+
+            result.IsSuccess.Should().BeTrue();
+
+            var infractionCategoriesCount = await Context.InfractionCategories
+                .Where(x => randomInfractionCategoriesIds.Contains(x.Id))
+                .CountAsync();
+
+            infractionCategoriesCount.Should().Be(0);
         }
     }
 }

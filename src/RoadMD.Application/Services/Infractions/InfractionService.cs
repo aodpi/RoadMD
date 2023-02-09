@@ -206,17 +206,22 @@ namespace RoadMD.Application.Services.Infractions
                 return new Result<Unit>(new NotFoundException(nameof(Photo), id));
             }
 
-            Context.Photos.Remove(photo);
+            await using var transaction = await Context.Database.BeginTransactionAsync(cancellationToken);
+            {
+                Context.Photos.Remove(photo);
 
-            try
-            {
-                await Context.SaveChangesAsync(cancellationToken);
-                await _photoStorage.DeletePhotos(new Guid[] { photo.BlobName }, cancellationToken);
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, "Error on delete photo \"{PhotoId}\"", photoId);
-                return new Result<Unit>(e);
+                try
+                {
+                    await Context.SaveChangesAsync(cancellationToken);
+                    await _photoStorage.DeletePhotos(new[] { photo.BlobName }, cancellationToken);
+
+                    await transaction.CommitAsync(cancellationToken);
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(e, "Error on delete photo \"{PhotoId}\"", photoId);
+                    return new Result<Unit>(e);
+                }
             }
 
             return new Result<Unit>();

@@ -26,6 +26,7 @@ namespace RoadMD.Application.Services.InfractionReports
             _logger = logger;
         }
 
+        /// <inheritdoc />
         public async Task<Result<InfractionReportDto>> GetAsync(Guid id, CancellationToken cancellationToken = default)
         {
             var infractionReportDto = await Context.InfractionReports
@@ -38,12 +39,14 @@ namespace RoadMD.Application.Services.InfractionReports
                 : new Result<InfractionReportDto>(infractionReportDto);
         }
 
+        /// <inheritdoc />
         public async Task<PaginatedListDto<InfractionReportDto>> GetListAsync(SieveModel queryModel, CancellationToken cancellationToken = default)
         {
             return await GetPaginatedListAsync<InfractionReport, InfractionReportDto>(
                 Context.InfractionReports.AsNoTracking(), queryModel, cancellationToken);
         }
 
+        /// <inheritdoc />
         public async Task<Result<InfractionReportDto>> CreateAsync(CreateInfractionReportDto input, CancellationToken cancellationToken = default)
         {
             var infractionReport = new InfractionReport
@@ -71,6 +74,7 @@ namespace RoadMD.Application.Services.InfractionReports
             return new Result<InfractionReportDto>(infractionReportDto);
         }
 
+        /// <inheritdoc />
         public async Task<Result<InfractionReportDto>> UpdateAsync(UpdateInfractionReportDto input, CancellationToken cancellationToken = default)
         {
             var infractionReport = await Context.InfractionReports
@@ -102,10 +106,20 @@ namespace RoadMD.Application.Services.InfractionReports
             return new Result<InfractionReportDto>(infractionReportDto);
         }
 
-        public async Task<Result<Unit>> DeleteAsync(Guid id, CancellationToken cancellationToken = default)
+        /// <inheritdoc />
+        public async Task<Result<Unit>> DeleteAsync(Guid id, Guid? infractionId = default, CancellationToken cancellationToken = default)
         {
-            var infractionReport = await Context.InfractionReports
+            var infractionReportQueryable = Context.InfractionReports
                 .Where(x => x.Id.Equals(id))
+                .AsQueryable();
+
+            if (infractionId.HasValue)
+            {
+                infractionReportQueryable = infractionReportQueryable
+                    .Where(x => x.InfractionId.Equals(infractionId.Value));
+            }
+
+            var infractionReport = await infractionReportQueryable
                 .SingleOrDefaultAsync(cancellationToken);
 
             if (infractionReport is null)
@@ -120,6 +134,24 @@ namespace RoadMD.Application.Services.InfractionReports
             catch (Exception e)
             {
                 _logger.LogError(e, "Error on delete infraction report \"{InfractionReportId}\"", id);
+                return new Result<Unit>(e);
+            }
+
+            return new Result<Unit>(Unit.Default);
+        }
+
+        /// <inheritdoc />
+        public async Task<Result<Unit>> BulkDeleteAsync(Guid[] ids, CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                await Context.InfractionReports
+                    .Where(x => ids.Contains(x.Id))
+                    .ExecuteDeleteAsync(cancellationToken: cancellationToken);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Error on delete infractions {infractionIds}", string.Join(',', ids));
                 return new Result<Unit>(e);
             }
 

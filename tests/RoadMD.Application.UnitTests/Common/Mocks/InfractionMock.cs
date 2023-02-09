@@ -22,7 +22,6 @@ namespace RoadMD.Application.UnitTests.Common.Mocks
                     .Ignore(x => x.InfractionId)
                     .Generate()
                 )
-                .RuleFor(x => x.LocationId, (faker, infraction) => infraction.Location.Id)
                 .RuleFor(x => x.Vehicle, new Faker<Vehicle>()
                     .StrictMode(true)
                     .RuleFor(x => x.Id, vehicleFaker => vehicleFaker.Random.Guid())
@@ -30,7 +29,8 @@ namespace RoadMD.Application.UnitTests.Common.Mocks
                     .Ignore(x => x.Infractions)
                     .Generate()
                 )
-                .RuleFor(x => x.VehicleId, (faker, infraction) => infraction.Vehicle.Id)
+                .Ignore(x => x.LocationId)
+                .Ignore(x => x.VehicleId)
                 .Ignore(x => x.Category)
                 .Ignore(x => x.Photos)
                 .Ignore(x => x.Reports);

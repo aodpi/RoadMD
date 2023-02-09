@@ -179,7 +179,7 @@ namespace RoadMD.Controllers
         public async Task<IActionResult> DeleteReport([FromRoute] Guid id, [FromRoute] Guid reportId,
             CancellationToken cancellationToken = default)
         {
-            var result = await _infractionReportService.DeleteAsync(reportId, cancellationToken);
+            var result = await _infractionReportService.DeleteAsync(reportId, id, cancellationToken);
 
             return result.ToNoContent();
         }

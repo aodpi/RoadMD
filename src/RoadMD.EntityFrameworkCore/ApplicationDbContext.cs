@@ -9,14 +9,14 @@ namespace RoadMD.EntityFrameworkCore
         {
         }
 
-        public DbSet<Vehicle> Vehicles { get; set; }
-        public DbSet<InfractionCategory> InfractionCategories { get; set; }
-        public DbSet<ReportCategory> ReportCategories { get; set; }
-        public DbSet<Infraction> Infractions { get; set; }
-        public DbSet<Location> Locations { get; set; }
-        public DbSet<Photo> Photos { get; set; }
-        public DbSet<InfractionReport> InfractionReports { get; set; }
-        public DbSet<Feedback> Feedbacks { get; set; }
+        public DbSet<Vehicle> Vehicles { get; set; } = default!;
+        public DbSet<InfractionCategory> InfractionCategories { get; set; } = default!;
+        public DbSet<ReportCategory> ReportCategories { get; set; } = default!;
+        public DbSet<Infraction> Infractions { get; set; } = default!;
+        public DbSet<Location> Locations { get; set; } = default!;
+        public DbSet<Photo> Photos { get; set; } = default!;
+        public DbSet<InfractionReport> InfractionReports { get; set; } = default!;
+        public DbSet<Feedback> Feedbacks { get; set; } = default!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -118,5 +118,22 @@ namespace RoadMD.Application.Services.Vehicles
 
             return new Result<Unit>(Unit.Default);
         }
+
+        public async Task<Result<Unit>> BulkDeleteAsync(Guid[] ids, CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                await Context.Vehicles
+                    .Where(x => ids.Contains(x.Id))
+                    .ExecuteDeleteAsync(cancellationToken);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Error on delete vehicle \"{VehicleIds}\"", string.Join(',', ids));
+                return new Result<Unit>(e);
+            }
+
+            return new Result<Unit>(Unit.Default);
+        }
     }
 }

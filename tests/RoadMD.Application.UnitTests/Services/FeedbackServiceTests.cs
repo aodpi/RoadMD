@@ -140,5 +140,26 @@ namespace RoadMD.Application.UnitTests.Services
 
             dbEntity.Should().BeNull();
         }
+
+        [Fact]
+        public async Task BulkDeleteFeedbacksAsync()
+        {
+            var feedbacks = FeedbackMock.GenerateRandomFeedbacks(Faker.Random.Number(2, 15));
+            await Context.Feedbacks.AddRangeAsync(feedbacks);
+            await Context.SaveChangesAsync();
+
+            var randomFeedbackIdsToDelete = Faker.PickRandom(feedbacks, feedbacks.Count)
+                .Select(x => x.Id)
+                .ToArray();
+
+            var result = await _feedbackService.BulkDeleteAsync(randomFeedbackIdsToDelete, CancellationToken.None);
+
+            result.IsSuccess.Should().BeTrue();
+
+            var entitiesCount = await Context.Feedbacks.Where(x => randomFeedbackIdsToDelete.Contains(x.Id))
+                .CountAsync();
+
+            entitiesCount.Should().Be(0);
+        }
     }
 }

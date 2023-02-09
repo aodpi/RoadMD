@@ -115,7 +115,29 @@ namespace RoadMD.Application.Services.Feedbacks
             }
             catch (Exception e)
             {
-                _logger.LogError(e, "Error on delete feedback \"FeedbackId\"", id);
+                _logger.LogError(e, "Error on delete feedback \"{FeedbackId}\"", id);
+                return new Result<Unit>(e);
+            }
+
+            return new Result<Unit>(Unit.Default);
+        }
+
+        public async Task<Result<Unit>> BulkDeleteAsync(Guid[] ids, CancellationToken cancellationToken = default)
+        {
+            if (!ids.Any())
+            {
+                return new Result<Unit>(Unit.Default);
+            }
+
+            try
+            {
+                await Context.Feedbacks.Where(x => ids.Contains(x.Id))
+                    .ExecuteDeleteAsync(cancellationToken: cancellationToken);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Error on bulk delete feedbacks");
+                return new Result<Unit>(e);
             }
 
             return new Result<Unit>(Unit.Default);

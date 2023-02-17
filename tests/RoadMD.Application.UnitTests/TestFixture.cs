@@ -28,8 +28,8 @@ namespace RoadMD.Application.UnitTests
         // Test Cleanup
         public void Dispose()
         {
-            Context.Database.EnsureDeleted();
-            Context.Dispose();
+            //Context.Database.EnsureDeleted();
+            //Context.Dispose();
         }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Moq;
 using RoadMD.Application.Dto.Common;
 using RoadMD.Application.Dto.InfractionCategories;
 using RoadMD.Application.Services.InfractionCategories;

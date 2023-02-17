@@ -1,7 +1,6 @@
 ﻿using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Moq;
 using RoadMD.Application.Dto.Infractions.Create;
 using RoadMD.Application.Dto.Infractions.Update;
 using RoadMD.Application.Services.Infractions;
@@ -199,5 +198,6 @@ namespace RoadMD.Application.UnitTests.Services
 
             dbEntity.Should().BeNull("Because entity was be deleted");
         }
+
     }
 }

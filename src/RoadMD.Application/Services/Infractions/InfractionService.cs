@@ -88,7 +88,7 @@ namespace RoadMD.Application.Services.Infractions
                 {
                     await using var stream = photo.OpenReadStream();
 
-                    var (url, blobName) = await _photoStorage.StorePhoto(photo.FileName, stream, cancellationToken);
+                    var (url, blobName) = await _photoStorage.StorePhotoAsync(photo.FileName, stream, cancellationToken);
 
                     infraction.Photos.Add(new Photo
                     {
@@ -99,7 +99,7 @@ namespace RoadMD.Application.Services.Infractions
                 }
             }
 
-            await Context.Infractions.AddAsync(infraction, cancellationToken);
+            await Context.AddAsync(infraction, cancellationToken);
 
             try
             {
@@ -181,7 +181,7 @@ namespace RoadMD.Application.Services.Infractions
                 {
                     var blobNames = infraction.Photos.Select(f => f.BlobName);
 
-                    await _photoStorage.DeletePhotos(blobNames, cancellationToken);
+                    await _photoStorage.DeletePhotosAsync(blobNames, cancellationToken);
                 }
 
                 await Context.SaveChangesAsync(cancellationToken);
@@ -213,7 +213,7 @@ namespace RoadMD.Application.Services.Infractions
                 try
                 {
                     await Context.SaveChangesAsync(cancellationToken);
-                    await _photoStorage.DeletePhotos(new[] { photo.BlobName }, cancellationToken);
+                    await _photoStorage.DeletePhotosAsync(new[] { photo.BlobName }, cancellationToken);
 
                     await transaction.CommitAsync(cancellationToken);
                 }

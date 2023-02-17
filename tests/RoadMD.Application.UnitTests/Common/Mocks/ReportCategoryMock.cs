@@ -2,9 +2,9 @@
 
 namespace RoadMD.Application.UnitTests.Common.Mocks
 {
-    public static class ReportCategoryMock
+    internal static class ReportCategoryMock
     {
-        public static Faker<ReportCategory> GetReportCategoryFaker()
+        internal static Faker<ReportCategory> GetReportCategoryFaker()
         {
             var reportCategoryFaker = new Faker<ReportCategory>()
                 .StrictMode(true)
@@ -15,12 +15,12 @@ namespace RoadMD.Application.UnitTests.Common.Mocks
             return reportCategoryFaker;
         }
 
-        public static List<ReportCategory> GenerateRandomReportCategories(int count)
+        internal static List<ReportCategory> GenerateRandomReportCategories(int count)
         {
             return GetReportCategoryFaker().Generate(count);
         }
 
-        public static ReportCategory GenerateRandomReportCategory()
+        internal static ReportCategory GenerateRandomReportCategory()
         {
             return GetReportCategoryFaker().Generate();
         }

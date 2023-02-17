@@ -9,7 +9,7 @@
         /// <param name="content">Photo content</param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task<(string Url, Guid BlobName)> StorePhoto(string filename, Stream content, CancellationToken cancellationToken);
+        Task<(string Url, Guid BlobName)> StorePhotoAsync(string filename, Stream content, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Delete a photo from blob
@@ -17,6 +17,6 @@
         /// <param name="blobNames"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task<bool> DeletePhotos(IEnumerable<Guid> blobNames, CancellationToken cancellationToken);
+        Task<bool> DeletePhotosAsync(IEnumerable<Guid> blobNames, CancellationToken cancellationToken = default);
     }
 }

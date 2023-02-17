@@ -2,9 +2,9 @@
 
 namespace RoadMD.Application.UnitTests.Common.Mocks
 {
-    public static class FeedbackMock
+    internal static class FeedbackMock
     {
-        public static Faker<Feedback> GetFeedbackFaker()
+        internal static Faker<Feedback> GetFeedbackFaker()
         {
             var fakerFeedback = new Faker<Feedback>()
                 .StrictMode(true)
@@ -17,12 +17,12 @@ namespace RoadMD.Application.UnitTests.Common.Mocks
             return fakerFeedback;
         }
 
-        public static List<Feedback> GenerateRandomFeedbacks(int count)
+        internal static List<Feedback> GenerateRandomFeedbacks(int count)
         {
             return GetFeedbackFaker().Generate(count);
         }
 
-        public static Feedback GenerateRandomFeedback()
+        internal static Feedback GenerateRandomFeedback()
         {
             return GetFeedbackFaker().Generate();
         }

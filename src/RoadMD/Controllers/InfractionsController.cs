@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RoadMD.Application.Dto.Common;
+using RoadMD.Application.Dto.InfractionReports;
 using RoadMD.Application.Dto.Infractions;
 using RoadMD.Application.Dto.Infractions.Create;
 using RoadMD.Application.Dto.Infractions.List;
 using RoadMD.Application.Dto.Infractions.Update;
-using RoadMD.Application.Dto.InfractionReports;
 using RoadMD.Application.Services.InfractionReports;
 using RoadMD.Application.Services.Infractions;
 using RoadMD.Extensions;
@@ -13,13 +13,13 @@ using Sieve.Models;
 namespace RoadMD.Controllers
 {
     /// <summary>
-    /// Infractions
+    ///     Infractions
     /// </summary>
     [Route("api/infractions")]
     public class InfractionsController : ApiControllerBase
     {
-        private readonly IInfractionService _infractionService;
         private readonly IInfractionReportService _infractionReportService;
+        private readonly IInfractionService _infractionService;
 
         public InfractionsController(IInfractionService infractionService,
             IInfractionReportService infractionReportService)
@@ -92,7 +92,11 @@ namespace RoadMD.Controllers
         public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateInfractionDto input,
             CancellationToken cancellationToken = default)
         {
-            if (id != input.Id) return BadRequest("Wrong ID");
+            if (id != input.Id)
+            {
+                return BadRequest("Wrong ID");
+            }
+
             var result = await _infractionService.UpdateAsync(input, cancellationToken);
 
             return result.ToNoContent();
@@ -142,7 +146,11 @@ namespace RoadMD.Controllers
         public async Task<IActionResult> AddReport([FromRoute] Guid id, [FromBody] CreateInfractionReportDto input,
             CancellationToken cancellationToken = default)
         {
-            if (id != input.InfractionId) return BadRequest("Wrong ID");
+            if (id != input.InfractionId)
+            {
+                return BadRequest("Wrong ID");
+            }
+
             var result = await _infractionReportService.CreateAsync(input, cancellationToken);
 
             return result.ToOk();
@@ -160,8 +168,15 @@ namespace RoadMD.Controllers
         public async Task<IActionResult> UpdateReport([FromRoute] Guid id, [FromRoute] Guid reportId,
             [FromBody] UpdateInfractionReportDto input, CancellationToken cancellationToken = default)
         {
-            if (id != input.InfractionId) return BadRequest("Wrong ID");
-            if (reportId != input.Id) return BadRequest("Wrong report ID");
+            if (id != input.InfractionId)
+            {
+                return BadRequest("Wrong ID");
+            }
+
+            if (reportId != input.Id)
+            {
+                return BadRequest("Wrong report ID");
+            }
 
             var result = await _infractionReportService.UpdateAsync(input, cancellationToken);
 

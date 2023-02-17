@@ -1,10 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RoadMD.Application.Dto.Common;
 using RoadMD.Application.Dto.Feedbacks;
-using RoadMD.Application.Dto.InfractionCategories;
-using RoadMD.Application.Dto.Infractions.Create;
-using RoadMD.Application.Dto.Infractions.List;
-using RoadMD.Application.Dto.Infractions.Update;
 using RoadMD.Application.Services.Feedbacks;
 using RoadMD.Extensions;
 using Sieve.Models;
@@ -88,7 +84,11 @@ namespace RoadMD.Controllers
         public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateFeedbackDto input,
             CancellationToken cancellationToken = default)
         {
-            if (id != input.Id) return BadRequest("Wrong ID");
+            if (id != input.Id)
+            {
+                return BadRequest("Wrong ID");
+            }
+
             var result = await _feedbackService.UpdateAsync(input, cancellationToken);
 
             return result.ToNoContent();

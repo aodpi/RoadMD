@@ -7,7 +7,7 @@ using RoadMD.Extensions;
 namespace RoadMD.Controllers
 {
     /// <summary>
-    /// Report categories
+    ///     Report categories
     /// </summary>
     [Route("api/report-categories")]
     public class ReportCategoriesController : ApiControllerBase
@@ -79,7 +79,11 @@ namespace RoadMD.Controllers
         public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateReportCategoryDto input,
             CancellationToken cancellationToken = default)
         {
-            if (id != input.Id) return BadRequest("Wrong Id");
+            if (id != input.Id)
+            {
+                return BadRequest("Wrong Id");
+            }
+
             var result = await _reportCategoryService.UpdateAsync(input, cancellationToken);
             return result.ToNoContent();
         }

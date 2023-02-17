@@ -2,9 +2,9 @@
 
 namespace RoadMD.Application.UnitTests.Common.Mocks
 {
-    public static class InfractionMock
+    internal static class InfractionMock
     {
-        public static Faker<Infraction> GetInfractionFaker()
+        internal static Faker<Infraction> GetInfractionFaker()
         {
             var fakerInfraction = new Faker<Infraction>()
                 .StrictMode(true)
@@ -25,7 +25,7 @@ namespace RoadMD.Application.UnitTests.Common.Mocks
                 .RuleFor(x => x.Vehicle, new Faker<Vehicle>()
                     .StrictMode(true)
                     .RuleFor(x => x.Id, vehicleFaker => vehicleFaker.Random.Guid())
-                    .RuleFor(x => x.Number, vehicleFaker => vehicleFaker.Vehicle.Vin())
+                    .RuleFor(x => x.Number, vehicleFaker => vehicleFaker.Vehicle.Vin()[..10])
                     .Ignore(x => x.Infractions)
                     .Generate()
                 )
@@ -38,13 +38,12 @@ namespace RoadMD.Application.UnitTests.Common.Mocks
             return fakerInfraction;
         }
 
-
-        public static List<Infraction> GenerateRandomInfractions(int count)
+        internal static List<Infraction> GenerateRandomInfractions(int count)
         {
             return GetInfractionFaker().Generate(count);
         }
 
-        public static Infraction GenerateRandomInfraction()
+        internal static Infraction GenerateRandomInfraction()
         {
             return GetInfractionFaker().Generate();
         }

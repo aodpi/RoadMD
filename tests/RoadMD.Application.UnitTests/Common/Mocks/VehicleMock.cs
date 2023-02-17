@@ -2,9 +2,9 @@
 
 namespace RoadMD.Application.UnitTests.Common.Mocks
 {
-    public static class VehicleMock
+    internal static class VehicleMock
     {
-        public static Faker<Vehicle> GetVehicleFaker()
+        internal static Faker<Vehicle> GetVehicleFaker()
         {
             var vehicleFaker = new Faker<Vehicle>()
                 .StrictMode(true)
@@ -15,12 +15,12 @@ namespace RoadMD.Application.UnitTests.Common.Mocks
             return vehicleFaker;
         }
 
-        public static List<Vehicle> GenerateRandomVehicles(int count)
+        internal static List<Vehicle> GenerateRandomVehicles(int count)
         {
             return GetVehicleFaker().Generate(count);
         }
 
-        public static Vehicle GenerateRandomVehicle()
+        internal static Vehicle GenerateRandomVehicle()
         {
             return GetVehicleFaker().Generate();
         }

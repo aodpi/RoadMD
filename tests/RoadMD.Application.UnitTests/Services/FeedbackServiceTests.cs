@@ -1,7 +1,6 @@
 ﻿using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Moq;
 using RoadMD.Application.Dto.Feedbacks;
 using RoadMD.Application.Services.Feedbacks;
 using RoadMD.Application.UnitTests.Common.Mocks;

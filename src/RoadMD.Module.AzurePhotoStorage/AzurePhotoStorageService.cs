@@ -8,7 +8,6 @@ namespace RoadMD.Module.AzurePhotoStorage
     {
         private readonly BlobServiceClient _blobServiceClient;
         private readonly IConfiguration _configuration;
-
         private const string PhotoContainerKey = "BlobStorage:PhotoContainerName";
 
         public AzurePhotoStorageService(BlobServiceClient blobServiceClient, IConfiguration configuration)
@@ -17,7 +16,8 @@ namespace RoadMD.Module.AzurePhotoStorage
             _configuration = configuration;
         }
 
-        public async Task<(string Url, Guid BlobName)> StorePhoto(string filename, Stream content, CancellationToken cancellationToken = default)
+        /// <inheritdoc />
+        public async Task<(string Url, Guid BlobName)> StorePhotoAsync(string filename, Stream content, CancellationToken cancellationToken = default)
         {
             var containerName = _configuration.GetValue(PhotoContainerKey, string.Empty);
 
@@ -41,8 +41,9 @@ namespace RoadMD.Module.AzurePhotoStorage
 
             return (url, blobName);
         }
-
-        public async Task<bool> DeletePhotos(IEnumerable<Guid> blobNames, CancellationToken cancellationToken = default)
+        
+        /// <inheritdoc />
+        public async Task<bool> DeletePhotosAsync(IEnumerable<Guid> blobNames, CancellationToken cancellationToken = default)
         {
             var containerName = _configuration.GetValue(PhotoContainerKey, string.Empty);
 

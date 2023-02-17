@@ -2,9 +2,9 @@
 
 namespace RoadMD.Application.UnitTests.Common.Mocks
 {
-    public static class InfractionReportMock
+    internal static class InfractionReportMock
     {
-        public static Faker<InfractionReport> GetInfractionReportFaker(Guid? infractionId = default, Guid? categoryId = default)
+        internal static Faker<InfractionReport> GetInfractionReportFaker(Guid? infractionId = default, Guid? categoryId = default)
         {
             var infractionFaker = InfractionMock.GetInfractionFaker();
 
@@ -21,12 +21,12 @@ namespace RoadMD.Application.UnitTests.Common.Mocks
             return infractionReport;
         }
 
-        public static List<InfractionReport> GenerateRandomInfractionReports(int count)
+        internal static List<InfractionReport> GenerateRandomInfractionReports(int count)
         {
             return GetInfractionReportFaker().Generate(count);
         }
 
-        public static InfractionReport GenerateRandomInfractionReport()
+        internal static InfractionReport GenerateRandomInfractionReport()
         {
             return GetInfractionReportFaker().Generate();
         }

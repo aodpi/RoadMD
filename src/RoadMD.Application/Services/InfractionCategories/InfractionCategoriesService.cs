@@ -66,18 +66,18 @@ namespace RoadMD.Application.Services.InfractionCategories
             return new Result<InfractionCategoryDto>(dto);
         }
 
-        public async Task<Result<InfractionCategoryDto>> UpdateAsync(UpdateInfractionCategoryDto input, CancellationToken cancellationToken = default)
+        public async Task<Result<InfractionCategoryDto>> UpdateAsync(UpdateInfractionCategoryDto updateInfractionCategory, CancellationToken cancellationToken = default)
         {
             var entity = await Context.InfractionCategories
                 .SingleOrDefaultAsync(x =>
-                    x.Id.Equals(input.Id), cancellationToken: cancellationToken);
+                    x.Id.Equals(updateInfractionCategory.Id), cancellationToken: cancellationToken);
 
             if (entity is null)
             {
-                return new Result<InfractionCategoryDto>(new NotFoundException(nameof(InfractionCategory), input.Id));
+                return new Result<InfractionCategoryDto>(new NotFoundException(nameof(InfractionCategory), updateInfractionCategory.Id));
             }
 
-            entity.Name = input.Name;
+            entity.Name = updateInfractionCategory.Name;
 
             Context.InfractionCategories.Update(entity);
 
@@ -87,7 +87,7 @@ namespace RoadMD.Application.Services.InfractionCategories
             }
             catch (Exception e)
             {
-                _logger.LogError(e, "Error on update infraction category \"{infractionCategoryId}\" ", input.Id);
+                _logger.LogError(e, "Error on update infraction category \"{infractionCategoryId}\" ", updateInfractionCategory.Id);
                 return new Result<InfractionCategoryDto>(e);
             }
 

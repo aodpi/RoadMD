@@ -24,17 +24,17 @@ namespace RoadMD.Application.Services
         /// <summary>
         ///     Mapper from entity to Dto
         /// </summary>
-        protected IMapper Mapper { get; init; }
+        protected IMapper Mapper { get; }
 
         /// <summary>
         ///     Database context
         /// </summary>
-        protected ApplicationDbContext Context { get; init; }
+        protected ApplicationDbContext Context { get; }
 
         /// <summary>
         ///     Sieve processor
         /// </summary>
-        protected ISieveProcessor SieveProcessor { get; init; }
+        protected ISieveProcessor SieveProcessor { get; }
 
 
         protected async Task<PaginatedListDto<TResult>> GetPaginatedListAsync<TSource, TResult>(IQueryable<TSource> source, SieveModel queryParams, CancellationToken cancellationToken = default) where TResult : class

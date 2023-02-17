@@ -1,8 +1,6 @@
 ﻿using FluentAssertions;
-using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Moq;
 using RoadMD.Application.Dto.InfractionReports;
 using RoadMD.Application.Services.InfractionReports;
 using RoadMD.Application.UnitTests.Common.Mocks;

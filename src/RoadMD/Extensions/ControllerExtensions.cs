@@ -44,6 +44,18 @@ namespace RoadMD.Extensions
                     };
                     return new NotFoundObjectResult(details);
                 }
+                case ConflictException conflictException:
+                {
+                    var details = new ProblemDetails
+                    {
+                        Type = "https://www.rfc-editor.org/rfc/rfc7231#section-6.5.8",
+                        Title = "Request could not be completed",
+                        Status = StatusCodes.Status409Conflict,
+                        Detail = conflictException.Message
+                    };
+
+                    return new ConflictObjectResult(details);
+                }
                 default:
                 {
                     var details = new ProblemDetails

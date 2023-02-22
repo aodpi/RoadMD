@@ -11,6 +11,7 @@ using RoadMD.Application.Services.Vehicles;
 using RoadMD.EntityFrameworkCore;
 using RoadMD.Module.AzurePhotoStorage;
 using RoadMD.Module.PhotoStorage.Abstractions;
+using Serilog;
 using Swashbuckle.AspNetCore.SwaggerUI;
 
 namespace RoadMD
@@ -97,6 +98,7 @@ namespace RoadMD
                 });
             }
 
+            app.UseSerilogRequestLogging();
             app.UseHttpsRedirection();
 
             app.MapControllers();

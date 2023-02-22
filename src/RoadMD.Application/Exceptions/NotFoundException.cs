@@ -1,6 +1,4 @@
-﻿using System.Runtime.Serialization;
-
-namespace RoadMD.Application.Exceptions
+﻿namespace RoadMD.Application.Exceptions
 {
     public class NotFoundException : Exception
     {

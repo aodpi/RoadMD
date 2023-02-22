@@ -1,3 +1,5 @@
+using Serilog;
+
 namespace RoadMD
 {
     public static class Program
@@ -8,6 +10,11 @@ namespace RoadMD
 
             // Configure app-wide services
             builder.Services.ConfigureServices(builder.Configuration);
+
+            builder.Host.UseSerilog((context, configuration) =>
+            {
+                configuration.ReadFrom.Configuration(context.Configuration);
+            });
             
             var app = builder.Build();
 

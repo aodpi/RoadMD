@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RoadMD.Application.Dto.Vehicles;
 using RoadMD.Application.Services.Vehicles;
-using System.ComponentModel.DataAnnotations;
 using RoadMD.Application.Dto.Common;
 using RoadMD.Extensions;
 using Sieve.Models;

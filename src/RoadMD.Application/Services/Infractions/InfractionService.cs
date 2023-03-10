@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using RoadMD.Application.Dto.Common;
 using RoadMD.Application.Dto.Infractions;
 using RoadMD.Application.Dto.Infractions.Create;
+using RoadMD.Application.Dto.Infractions.Details;
 using RoadMD.Application.Dto.Infractions.List;
 using RoadMD.Application.Dto.Infractions.Update;
 using RoadMD.Application.Exceptions;
@@ -41,6 +42,18 @@ namespace RoadMD.Application.Services.Infractions
             return infractionDto is null
                 ? new Result<InfractionDto>(new NotFoundException(nameof(Infraction), id))
                 : new Result<InfractionDto>(infractionDto);
+        }
+
+        public async Task<Result<InfractionDetailsDto>> GetDetails(Guid id, CancellationToken cancellationToken = default)
+        {
+            var infractionDetailsDto = await Context.Infractions
+                .Where(x => x.Id.Equals(id))
+                .ProjectToType<InfractionDetailsDto>(Mapper.Config)
+                .SingleOrDefaultAsync(cancellationToken);
+
+            return infractionDetailsDto is null
+                ? new Result<InfractionDetailsDto>(new NotFoundException(nameof(Infraction), id))
+                : new Result<InfractionDetailsDto>(infractionDetailsDto);
         }
 
         public async Task<PaginatedListDto<InfractionListDto>> GetListAsync(SieveModel queryParams, CancellationToken cancellationToken = default)

@@ -43,6 +43,23 @@ namespace RoadMD.Controllers
             var result = await _infractionService.GetAsync(id, cancellationToken);
 
             return result.ToOk();
+        }        
+        
+        /// <summary>
+        ///     Get infraction details by id
+        /// </summary>
+        /// <param name="id">Infraction ID</param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        [HttpGet("{id:guid}/details")]
+        [ProducesResponseType(typeof(InfractionDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetDetails([FromRoute] Guid id, CancellationToken cancellationToken = default)
+        {
+            var result = await _infractionService.GetDetails(id, cancellationToken);
+
+            return result.ToOk();
         }
 
         /// <summary>

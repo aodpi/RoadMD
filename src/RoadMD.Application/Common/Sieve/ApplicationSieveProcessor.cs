@@ -73,6 +73,26 @@ namespace RoadMD.Application.Common.Sieve
 
             #endregion
 
+            #region Feedback
+
+            mapper.Property<Feedback>(x => x.Subject)
+                .CanSort()
+                .CanFilter();
+
+            mapper.Property<Feedback>(x => x.Description)
+                .CanSort()
+                .CanFilter();
+
+            mapper.Property<Feedback>(x => x.UserEmail)
+                .CanSort()
+                .CanFilter();
+
+            mapper.Property<Feedback>(x => x.UserName)
+                .CanSort()
+                .CanFilter();
+
+            #endregion
+
             return base.MapProperties(mapper);
         }
     }

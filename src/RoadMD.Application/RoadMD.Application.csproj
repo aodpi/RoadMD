@@ -31,6 +31,7 @@
     <Folder Include="Common\Extensions\" />
     <Folder Include="Dto\InfractionCategories\" />
     <Folder Include="Dto\Common\" />
+    <Folder Include="Dto\Infractions\Details\" />
     <Folder Include="Dto\ReportCategories\" />
     <Folder Include="Services\InfractionCategories\" />
     <Folder Include="Services\ReportCategories\" />

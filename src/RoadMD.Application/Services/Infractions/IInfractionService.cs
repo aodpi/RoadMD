@@ -3,6 +3,7 @@ using LanguageExt.Common;
 using RoadMD.Application.Dto.Common;
 using RoadMD.Application.Dto.Infractions;
 using RoadMD.Application.Dto.Infractions.Create;
+using RoadMD.Application.Dto.Infractions.Details;
 using RoadMD.Application.Dto.Infractions.List;
 using RoadMD.Application.Dto.Infractions.Update;
 using Sieve.Models;
@@ -12,6 +13,7 @@ namespace RoadMD.Application.Services.Infractions
     public interface IInfractionService
     {
         Task<Result<InfractionDto>> GetAsync(Guid id, CancellationToken cancellationToken = default);
+        Task<Result<InfractionDetailsDto>> GetDetails(Guid id, CancellationToken cancellationToken = default);
 
         Task<PaginatedListDto<InfractionListDto>> GetListAsync(SieveModel queryParams,
             CancellationToken cancellationToken = default);

@@ -2,10 +2,10 @@
 {
     public class Feedback : BaseEntity
     {
-        public string Subject { get; set; }
-        public string Description { get; set; }
+        public string Subject { get; set; } = null!;
+        public string Description { get; set; } = null!;
 
-        public string UserName { get; set; }
-        public string UserEmail { get; set; }
+        public string UserName { get; set; } = null!;
+        public string UserEmail { get; set; } = null!;
     }
 }

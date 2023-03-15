@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using RoadMD.Application.Dto.Common;
 using RoadMD.Application.Dto.Feedbacks;
+using RoadMD.Application.Dto.Feedbacks.Grid;
 using RoadMD.Application.Exceptions;
 using RoadMD.Domain.Entities;
 using RoadMD.EntityFrameworkCore;
@@ -37,9 +38,9 @@ namespace RoadMD.Application.Services.Feedbacks
                 : new Result<FeedbackDto>(entityDto);
         }
 
-        public async Task<PaginatedListDto<FeedbackDto>> GetListAsync(SieveModel queryModel, CancellationToken cancellationToken = default)
+        public async Task<PaginatedListDto<FeedbackGridDto>> GetListAsync(SieveModel queryModel, CancellationToken cancellationToken = default)
         {
-            return await GetPaginatedListAsync<Feedback, FeedbackDto>(Context.Feedbacks.AsQueryable(), queryModel,
+            return await GetPaginatedListAsync<Feedback, FeedbackGridDto>(Context.Feedbacks.AsQueryable(), queryModel,
                 cancellationToken);
         }
 

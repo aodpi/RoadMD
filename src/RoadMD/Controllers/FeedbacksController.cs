@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RoadMD.Application.Dto.Common;
 using RoadMD.Application.Dto.Feedbacks;
+using RoadMD.Application.Dto.Feedbacks.Grid;
 using RoadMD.Application.Services.Feedbacks;
 using RoadMD.Extensions;
 using Sieve.Models;
@@ -44,7 +45,7 @@ namespace RoadMD.Controllers
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         [HttpGet]
-        [ProducesResponseType(typeof(PaginatedListDto<FeedbackDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(PaginatedListDto<FeedbackGridDto>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetList([FromQuery] SieveModel queryParams,
             CancellationToken cancellationToken = default)
         {

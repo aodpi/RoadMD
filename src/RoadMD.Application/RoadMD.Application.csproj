@@ -29,6 +29,7 @@
 
   <ItemGroup>
     <Folder Include="Common\Extensions\" />
+    <Folder Include="Dto\Feedbacks\Grid\" />
     <Folder Include="Dto\InfractionCategories\" />
     <Folder Include="Dto\Common\" />
     <Folder Include="Dto\Infractions\Details\" />

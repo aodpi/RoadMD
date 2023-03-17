@@ -9,66 +9,58 @@ namespace RoadMD.Extensions
     {
         public static IActionResult ToOk<TResult>(this Result<TResult> result)
         {
-            return result.Match(obj => new OkObjectResult(obj), Fail);
+            return result.Match(Ok, Fail);
         }
 
         public static IActionResult ToOk<TResult, TContract>(this Result<TResult> result,
             Func<TResult, TContract> mapper)
         {
-            return result.Match(obj =>
-            {
-                var response = mapper(obj);
-                return new OkObjectResult(response);
-            }, Fail);
+            return result.Match(obj => Ok(mapper(obj)), Fail);
         }
-
 
         public static IActionResult ToNoContent<TResult>(this Result<TResult> result)
         {
             return result.Match(_ => new NoContentResult(), Fail);
         }
 
+        private static IActionResult Ok<TResult>(TResult result)
+        {
+            return new OkObjectResult(result);
+        }
+
         private static IActionResult Fail(Exception exception)
         {
-            switch (exception)
+            IActionResult GetActionResult(string type, string title, int statusCode, string detail)
             {
-                case ValidationException validationException:
-                    return new BadRequestObjectResult(validationException);
-                case NotFoundException notFoundException:
+                var details = new ProblemDetails
                 {
-                    var details = new ProblemDetails
-                    {
-                        Type = "https://tools.ietf.org/html/rfc7231#section-6.5.4",
-                        Title = "The specified resource was not found.",
-                        Detail = notFoundException.Message
-                    };
-                    return new NotFoundObjectResult(details);
-                }
-                case ConflictException conflictException:
-                {
-                    var details = new ProblemDetails
-                    {
-                        Type = "https://www.rfc-editor.org/rfc/rfc7231#section-6.5.8",
-                        Title = "Request could not be completed",
-                        Status = StatusCodes.Status409Conflict,
-                        Detail = conflictException.Message
-                    };
-
-                    return new ConflictObjectResult(details);
-                }
-                default:
-                {
-                    var details = new ProblemDetails
-                    {
-                        Status = StatusCodes.Status500InternalServerError,
-                        Title = "An error occurred while processing your request.",
-                        Type = "https://tools.ietf.org/html/rfc7231#section-6.6.1",
-                        Detail = exception.Message
-                    };
-
-                    return new ObjectResult(details) { StatusCode = StatusCodes.Status500InternalServerError };
-                }
+                    Type = type,
+                    Title = title,
+                    Status = statusCode,
+                    Detail = detail
+                };
+                return new ObjectResult(details) { StatusCode = statusCode };
             }
+
+            return exception switch
+            {
+                ValidationException validationException => new BadRequestObjectResult(validationException),
+                NotFoundException notFoundException => GetActionResult(
+                    "https://tools.ietf.org/html/rfc7231#section-6.5.4",
+                    "The specified resource was not found.",
+                    StatusCodes.Status404NotFound,
+                    notFoundException.Message),
+                ConflictException conflictException => GetActionResult(
+                    "https://www.rfc-editor.org/rfc/rfc7231#section-6.5.8",
+                    "Request could not be completed",
+                    StatusCodes.Status409Conflict,
+                    conflictException.Message),
+                _ => GetActionResult(
+                    "https://tools.ietf.org/html/rfc7231#section-6.6.1",
+                    "An error occurred while processing your request.",
+                    StatusCodes.Status500InternalServerError,
+                    exception.Message)
+            };
         }
     }
 }

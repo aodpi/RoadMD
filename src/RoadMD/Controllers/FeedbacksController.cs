@@ -22,11 +22,11 @@ namespace RoadMD.Controllers
         }
 
         /// <summary>
-        ///     Get feedback by id
+        ///     Retrieves a feedback by its ID.
         /// </summary>
-        /// <param name="id">Feedback ID</param>
+        /// <param name="id">The ID of the feedback to retrieve.</param>
         /// <param name="cancellationToken"></param>
-        /// <returns></returns>
+        /// <returns>An IActionResult containing a FeedbackDto object if the feedback is found, or an appropriate error response otherwise.</returns>
         [HttpGet("{id:guid}")]
         [ProducesResponseType(typeof(FeedbackDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -39,10 +39,10 @@ namespace RoadMD.Controllers
         }
 
         /// <summary>
-        ///     List all feedbacks
+        ///     Retrieves a paginated list of feedbacks based on the provided query parameters.
         /// </summary>
-        /// <param name="queryParams">Query Params</param>
-        /// <param name="cancellationToken"></param>
+        /// <param name="queryParams">The query parameters containing filtering, sorting, and pagination options.</param>
+        /// <param name="cancellationToken">An optional CancellationToken to observe while waiting for the task to complete. The default value is CancellationToken.None.</param>
         /// <returns></returns>
         [HttpGet]
         [ProducesResponseType(typeof(PaginatedListDto<FeedbackGridDto>), StatusCodes.Status200OK)]

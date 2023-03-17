@@ -21,14 +21,17 @@ namespace RoadMD.Module.AzurePhotoStorage
         {
             var containerName = _configuration.GetValue(PhotoContainerKey, string.Empty);
 
-
-            if (!await _blobServiceClient.GetBlobContainerClient(containerName).ExistsAsync(cancellationToken))
+            if (string.IsNullOrEmpty(containerName))
             {
-                await _blobServiceClient.CreateBlobContainerAsync(containerName, cancellationToken: cancellationToken);
+                throw new InvalidOperationException("Photo container name is missing in the configuration.");
             }
 
-
             var containerClient = _blobServiceClient.GetBlobContainerClient(containerName);
+
+            if (!await containerClient.ExistsAsync(cancellationToken))
+            {
+                await containerClient.CreateAsync(cancellationToken: cancellationToken);
+            }
 
             var extension = Path.GetExtension(filename);
             var blobName = Guid.NewGuid();
@@ -36,27 +39,30 @@ namespace RoadMD.Module.AzurePhotoStorage
 
             await containerClient.UploadBlobAsync(newPath, content, cancellationToken);
 
-            string rawUrl = Path.Combine(containerClient.Uri.ToString(), newPath);
+            var rawUrl = Path.Combine(containerClient.Uri.ToString(), newPath);
             var url = new Uri(rawUrl, UriKind.Absolute).ToString();
 
             return (url, blobName);
         }
-        
+
         /// <inheritdoc />
         public async Task<bool> DeletePhotosAsync(IEnumerable<Guid> blobNames, CancellationToken cancellationToken = default)
         {
-            var containerName = _configuration.GetValue(PhotoContainerKey, string.Empty);
+            var containerName = _configuration.GetValue<string>(PhotoContainerKey, string.Empty);
+
+            if (string.IsNullOrEmpty(containerName))
+            {
+                throw new InvalidOperationException("Photo container name is missing in the configuration.");
+            }
 
             var containerClient = _blobServiceClient.GetBlobContainerClient(containerName);
 
-            bool result = false;
+            var tasks = blobNames.Select(blobName =>
+                containerClient.DeleteBlobIfExistsAsync(blobName.ToString(), cancellationToken: cancellationToken));
 
-            foreach (var blobName in blobNames)
-            {
-                result &= await containerClient.DeleteBlobIfExistsAsync(blobName.ToString(), cancellationToken: cancellationToken);
-            }
+            var results = await Task.WhenAll(tasks);
 
-            return result;
+            return results.All(r => r);
         }
     }
 }

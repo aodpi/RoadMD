@@ -1,4 +1,5 @@
-﻿using LanguageExt;
+﻿using System.Runtime.CompilerServices;
+using LanguageExt;
 using LanguageExt.Common;
 using Mapster;
 using MapsterMapper;
@@ -15,6 +16,9 @@ using Sieve.Services;
 
 namespace RoadMD.Application.Services.Feedbacks
 {
+    /// <summary>
+    /// Provides CRUD operations for Feedback objects.
+    /// </summary>
     public class FeedbackService : ServiceBase, IFeedbackService
     {
         private readonly ILogger<FeedbackService> _logger;
@@ -26,6 +30,12 @@ namespace RoadMD.Application.Services.Feedbacks
             _logger = logger;
         }
 
+        /// <summary>
+        /// Retrieves a FeedbackDto object asynchronously based on the provided Guid and an optional CancellationToken.
+        /// </summary>
+        /// <param name="id">The Guid representing the unique identifier of the feedback.</param>
+        /// <param name="cancellationToken">An optional CancellationToken to observe while waiting for the task to complete. The default value is CancellationToken.None.</param>
+        /// <returns>A Task that represents the asynchronous operation. The task result contains a Result of FeedbackDto object.</returns>
         public async Task<Result<FeedbackDto>> GetAsync(Guid id, CancellationToken cancellationToken = default)
         {
             var entityDto = await Context.Feedbacks
@@ -44,6 +54,12 @@ namespace RoadMD.Application.Services.Feedbacks
                 cancellationToken);
         }
 
+        /// <summary>
+        /// Creates a new Feedback asynchronously based on the provided CreateFeedbackDto object and an optional CancellationToken.
+        /// </summary>
+        /// <param name="input">The CreateFeedbackDto object containing the data for the new feedback.</param>
+        /// <param name="cancellationToken">An optional CancellationToken to observe while waiting for the task to complete. The default value is CancellationToken.None.</param>
+        /// <returns>A Task that represents the asynchronous operation. The task result contains a Result of FeedbackDto object.</returns>
         public async Task<Result<FeedbackDto>> CreateAsync(CreateFeedbackDto input, CancellationToken cancellationToken = default)
         {
             var entity = new Feedback
@@ -69,6 +85,12 @@ namespace RoadMD.Application.Services.Feedbacks
             return new Result<FeedbackDto>(Mapper.Map<FeedbackDto>(entity));
         }
 
+        /// <summary>
+        /// Updates an existing Feedback asynchronously based on the provided UpdateFeedbackDto object and an optional CancellationToken.
+        /// </summary>
+        /// <param name="input">The UpdateFeedbackDto object containing the updated data for the feedback.</param>
+        /// <param name="cancellationToken">An optional CancellationToken to observe while waiting for the task to complete. The default value is CancellationToken.None.</param>
+        /// <returns>A Task that represents the asynchronous operation. The task result contains a Result of FeedbackDto object.</returns>
         public async Task<Result<FeedbackDto>> UpdateAsync(UpdateFeedbackDto input, CancellationToken cancellationToken = default)
         {
             var feedbackDb = await Context.Feedbacks
@@ -125,7 +147,7 @@ namespace RoadMD.Application.Services.Feedbacks
 
         public async Task<Result<Unit>> BulkDeleteAsync(Guid[] ids, CancellationToken cancellationToken = default)
         {
-            if (!ids.Any())
+            if (ids.Length == 0)
             {
                 return new Result<Unit>(Unit.Default);
             }
@@ -137,7 +159,7 @@ namespace RoadMD.Application.Services.Feedbacks
             }
             catch (Exception e)
             {
-                _logger.LogError(e, "Error on bulk delete feedbacks");
+                _logger.LogError(e, "Error on bulk delete feedbacks. Ids: {FeedbackIds}", string.Join(", ", ids));
                 return new Result<Unit>(e);
             }
 
